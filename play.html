@@ -1,6 +1,6 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="dark">
-<head>
+<head><script src="e2e.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Study Ace | Player</title>
@@ -307,7 +307,7 @@ window.showFallbackState = function(message, iconName, title, actionText, target
 
 async function resolveAndPlay() {
     try {
-        // 🔥 REMOVED KEY & DEVICE ID LOGIC HERE 🔥
+        // ðŸ”¥ REMOVED KEY & DEVICE ID LOGIC HERE ðŸ”¥
         const fetchUrl = `${API_ENDPOINT}?content_id=${CONTENT_ID}&course_id=${COURSE_ID}`;
         
         const response = await fetch(fetchUrl, { method: "GET" });
@@ -504,3 +504,4 @@ window.addEventListener('beforeunload', () => {
 </script>
 </body>
 </html>
+

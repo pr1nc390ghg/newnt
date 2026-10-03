@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="dark">
-<head>
+<head><script src="e2e.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Study Ace 🎓 | Live Classes</title>
+    <title>Study Ace ðŸŽ“ | Live Classes</title>
     
     <!-- Updated Favicon -->
     <link rel="icon" href="https://i.ibb.co/sprtw68N/IMG-5850.png" type="image/png">
@@ -378,7 +378,7 @@
             await loadCourseClassesForTab(tab);
         }
 
-        // 🔥 NO KEY/DEVICE ID LOGIC NEEDED ANYMORE 🔥
+        // ðŸ”¥ NO KEY/DEVICE ID LOGIC NEEDED ANYMORE ðŸ”¥
         async function loadCourseClassesForTab(tabType) {
             const container = document.getElementById('cards-container');
             const loader = document.getElementById('loader');
@@ -469,7 +469,7 @@
             }
         }
 
-        // 🔥 FETCH FOR STREAM WITHOUT SECURE KEY/DEVICE ID
+        // ðŸ”¥ FETCH FOR STREAM WITHOUT SECURE KEY/DEVICE ID
         async function fetchStreamAndPlay(videoId, title, thumbnail) {
             if (!videoId || !courseId) {
                 showToast("Missing Video ID or Course ID!", "error");
@@ -597,7 +597,7 @@
                             <span style="color: rgba(148,163,184,0.7);">Started at</span><span class="font-bold" style="color: #4ade80;">${timeStr}</span>
                             ` : `
                             <i data-lucide="calendar" class="w-3.5 h-3.5 text-themeBlue"></i>
-                            <span class="font-medium" style="color: rgba(203,213,225,0.8);">${dateStr}</span><span style="color: rgba(255,255,255,0.2);">·</span><span class="font-bold" style="color: #38bdf8;">${timeStr}</span>
+                            <span class="font-medium" style="color: rgba(203,213,225,0.8);">${dateStr}</span><span style="color: rgba(255,255,255,0.2);">Â·</span><span class="font-bold" style="color: #38bdf8;">${timeStr}</span>
                             `}
                         </div>
 
@@ -668,7 +668,7 @@
             });
         }, 1000);
 
-        // 🧠 🔥 YOUTUBE DETECTION LOGIC 🔥 🧠
+        // ðŸ§  ðŸ”¥ YOUTUBE DETECTION LOGIC ðŸ”¥ ðŸ§ 
         function isYouTubeSource(url) {
             if (!url) return false;
             if (url.toLowerCase().includes('.m3u8') || url.toLowerCase().includes('.mp4')) return false;
@@ -685,7 +685,7 @@
             return match ? match[1] : url; 
         }
 
-        // 🔥 SMART PLAYER (YOUTUBE & M3U8 SWITCHER)
+        // ðŸ”¥ SMART PLAYER (YOUTUBE & M3U8 SWITCHER)
         function initVideoPlayer(sourceUrl, title, poster, isLive) {
             document.getElementById('video-title').innerText = title;
             if (isLive) {
@@ -841,3 +841,4 @@
     </script>
 </body>
 </html>
+

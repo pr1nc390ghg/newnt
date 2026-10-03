@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" class="dark">
-<head>
+<head><script src="e2e.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>StudyBee 🐝 | Secure Login</title>
+    <title>StudyBee ðŸ | Secure Login</title>
     
     <link rel="icon" href="https://i.ibb.co/yF4mhNPB/f493d534-fbf8-4b31-b741-83b343f8a9e1.jpg" type="image/jpeg">  
     <script src="https://cdn.tailwindcss.com"></script>
@@ -163,9 +163,9 @@
                     accessToken: token,
                     lastLogin: new Date().toISOString()
                 }, { merge: true });
-                console.log("✅ User data saved to Firestore successfully.");
+                console.log("âœ… User data saved to Firestore successfully.");
             } catch (error) {
-                console.error("❌ Firestore save error:", error);
+                console.error("âŒ Firestore save error:", error);
             }
         };
     </script>
@@ -311,3 +311,4 @@
     </script>
 </body>
 </html>
+
