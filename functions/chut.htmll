@@ -1,0 +1,95 @@
+/**
+ * VideoCrypt DRM Link Extractor API for Cloudflare Pages Functions
+ * File Name must be: functions/[vdc_id].js
+ * URL Structure: https://your-pages-url.com/{vdc_id}
+ */
+
+// Handle CORS Preflight request (OPTIONS)
+export async function onRequestOptions() {
+    return new Response(null, {
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+        },
+    });
+}
+
+// Handle Actual GET request
+export async function onRequestGet(context) {
+    const corsHeaders = {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type",
+    };
+
+    // Extract dynamic ID from the URL path directly via context.params
+    // Kyunki file ka naam [vdc_id].js hai, ye automatically param pakad lega
+    const vdcId = context.params.vdc_id;
+
+    if (!vdcId) {
+        return new Response(JSON.stringify({
+            success: false,
+            error: "Invalid Request",
+            message: "vdc_id is missing."
+        }, null, 2), {
+            status: 400,
+            headers: { "Content-Type": "application/json", ...corsHeaders }
+        });
+    }
+
+    // API & Auth Details (Headers)
+    const drmApiUrl = `https://api.videocrypt.com/getVideoDetailsDrm`;
+    const drmHeaders = {
+        'accept': 'application/json, text/plain, */*',
+        'accesskey': 'WEU1QzAxMjZVRzlLUVJKTjNCTDc=',
+        'account-id': '10004141',
+        'content-type': 'application/json',
+        'device-id': '71d3548555586126ed7071102e663619',
+        'device-name': '1',
+        'device-type': '1',
+        'origin': 'https://nexttoppers.com',
+        'referer': 'https://nexttoppers.com/',
+        'secretkey': 'QVZNditHMENJZDFGYlIvUUt1VG9Zd081WEhqZm44dERQMzdKTnFaNA==',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'user-id': '3875028',
+        'version': '1'
+    };
+
+    try {
+        // Hit VideoCrypt API securely from Backend
+        const drmResponse = await fetch(drmApiUrl, {
+            method: 'POST',
+            headers: drmHeaders,
+            body: JSON.stringify({ name: vdcId, flag: 1 }) // flag: 1 indicates HLS stream request
+        });
+
+        // Parse response
+        const drmDetails = await drmResponse.json();
+
+        // Return Clean Response to the user
+        return new Response(JSON.stringify({
+            success: true,
+            extracted_id: vdcId,
+            data: drmDetails
+        }, null, 2), {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json",
+                "Cache-Control": "public, max-age=300", // Cache for 5 mins to save API hits
+                ...corsHeaders
+            }
+        });
+
+    } catch (err) {
+        // Error Handling
+        return new Response(JSON.stringify({
+            success: false,
+            error: "Failed to fetch details from VideoCrypt API",
+            details: err.message
+        }, null, 2), {
+            status: 500,
+            headers: { "Content-Type": "application/json", ...corsHeaders }
+        });
+    }
+}

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>STUDY ACE - Advanced Downloader</title>
+    
+    <!-- Updated Favicon -->
+    <link rel="icon" href="https://i.ibb.co/sprtw68N/IMG-5850.png" type="image/png">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        themeBg: '#0f172a',
+                        cardBg: 'rgba(30, 41, 59, 0.6)',
+                        themeBlue: '#38bdf8',
+                        themeBlueHover: '#0ea5e9',
+                        themeGreen: '#10B981',
+                        textDim: '#94a3b8'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@600;700;800;900&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; 
+            color: #ffffff;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 100vh;
+            min-height: 100dvh;
+        }
+        
+        /* Background Effects - Sky Blue */
+        .bg-blue-grid {
+            background-size: 40px 40px;
+            background-image: 
+                linear-gradient(to right, rgba(56, 189, 248, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(56, 189, 248, 0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(ellipse at top center, black 40%, transparent 80%);
+            -webkit-mask-image: radial-gradient(ellipse at top center, black 40%, transparent 80%);
+            animation: gridPulse 15s ease-in-out infinite alternate;
+        }
+
+        @keyframes gridPulse {
+            0% { opacity: 0.5; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        /* Glassmorphism */
+        .glass-card { 
+            background: rgba(30, 41, 59, 0.65); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.06); 
+        }
+
+        .btn-click-effect { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1); }
+        .btn-click-effect:active { transform: scale(0.95); }
+
+        @keyframes popIn {
+            0% { opacity: 0; transform: translateY(20px) scale(0.95); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+        .animate-pop-in { animation: popIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; opacity: 0; }
+
+        /* Custom Progress Bar - Sky Blue Theme */
+        .progress-container {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #0ea5e9, #38bdf8);
+            width: 0%;
+            transition: width 0.2s ease;
+            box-shadow: 0 0 15px rgba(56, 189, 248, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Shimmer effect on progress bar */
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Custom scrollbar for quality list */
+        .quality-list-scroll::-webkit-scrollbar { width: 4px; }
+        .quality-list-scroll::-webkit-scrollbar-track { background: transparent; }
+        .quality-list-scroll::-webkit-scrollbar-thumb { background: #38bdf8; border-radius: 4px; }
+    </style>
+</head>
+<body class="text-white flex flex-col relative overflow-hidden">
+
+    <!-- Background Effects -->
+    <div class="fixed inset-0 pointer-events-none bg-blue-grid z-[-1]"></div>
+    <div class="fixed top-[-10%] left-[-5%] w-[400px] h-[400px] bg-themeBlue rounded-full blur-[150px] pointer-events-none z-[-1] opacity-20"></div>
+
+    <!-- Header -->
+    <header class="border-b border-white/5 bg-slate-900/80 backdrop-blur-xl px-4 py-3 sticky top-0 z-50 flex items-center justify-between shadow-2xl shrink-0">
+        <div class="flex items-center gap-4 md:gap-6">
+            <button onclick="goBack()" class="flex items-center gap-2 text-textDim hover:text-themeBlue transition-colors text-xs font-bold tracking-wider btn-click-effect">
+                <i class="fa-solid fa-arrow-left"></i> <span class="hidden md:inline">BACK</span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div class="relative w-8 h-8 rounded-lg overflow-hidden bg-white shadow-lg shadow-themeBlue/20">
+                    <img src="https://i.ibb.co/sprtw68N/IMG-5850.png" alt="Logo" class="w-full h-full object-contain p-0.5">
+                </div>
+                <h1 class="text-lg font-black tracking-widest text-white font-syne">STUDY<span class="text-themeBlue">ACE</span></h1>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-slate-800 rounded-full border border-themeBlue/20 text-[10px] font-bold text-themeBlue uppercase tracking-wide">
+            <i class="fa-solid fa-bolt"></i> FAST DL
+        </div>
+    </header>
+
+    <main class="max-w-[800px] w-full mx-auto p-4 md:p-8 flex-1 relative z-10 flex flex-col items-center justify-center">
+        
+        <!-- Loading State -->
+        <div id="loading-state" class="flex flex-col items-center justify-center py-20 w-full animate-pop-in">
+            <div class="relative w-20 h-20 mb-6">
+                <div class="absolute inset-0 rounded-full border-t-4 border-white/10 border-r-4 border-r-themeBlue animate-spin"></div>
+                <i class="fa-solid fa-circle-notch absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-themeBlue text-2xl animate-spin" style="animation-direction: reverse;"></i>
+            </div>
+            <h2 class="text-xl font-bold text-white tracking-wide animate-pulse">Extracting Video Data...</h2>
+            <p class="text-sm text-textDim mt-2 text-center max-w-xs">Please wait while we secure connection to the server.</p>
+        </div>
+
+        <!-- Download UI (Hidden by default) -->
+        <div id="download-ui" class="w-full hidden animate-pop-in">
+            <div class="glass-card rounded-[2rem] p-6 md:p-8 shadow-2xl relative overflow-hidden border-t border-themeBlue/30">
+                
+                <!-- Video Info -->
+                <div class="flex flex-col md:flex-row gap-5 items-center md:items-start mb-8 relative z-10 text-center md:text-left">
+                    <div class="w-40 md:w-48 shrink-0 relative rounded-2xl overflow-hidden border border-white/10 shadow-lg bg-black">
+                        <div class="aspect-video relative">
+                            <img id="video-thumbnail" src="" alt="Thumbnail" class="w-full h-full object-cover opacity-90">
+                            <!-- MP4 FORMAT -->
+                            <div class="absolute bottom-2 right-2 bg-slate-900/80 backdrop-blur-md px-2 py-1 rounded text-[10px] font-bold text-white border border-white/20">
+                                <i class="fa-solid fa-film text-themeBlue mr-1"></i> MP4 FORMAT
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 pt-2 w-full">
+                        <div class="inline-block px-2 py-0.5 mb-3 rounded bg-white/5 text-white text-[10px] font-bold tracking-widest uppercase border border-white/10">
+                            Video ID: <span id="display-content-id" class="text-themeBlue">...</span>
+                        </div>
+                        <h2 id="video-title" class="text-xl md:text-2xl font-black text-white leading-tight mb-2">Loading...</h2>
+                        <p class="text-xs text-textDim mb-4">File will be downloaded in secure `.mp4` format (Playable in Gallery/MX Player).</p>
+                        
+                        <div class="flex flex-wrap items-center justify-center md:justify-start gap-4 text-xs font-semibold text-slate-400 bg-slate-900/50 p-2 rounded-lg border border-white/5 inline-flex">
+                            <div class="flex items-center gap-1.5"><i class="fa-solid fa-memory text-themeBlue"></i> RAM intensive</div>
+                            <div class="flex items-center gap-1.5"><i class="fa-solid fa-wifi text-themeGreen"></i> Keep Tab Open</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Download Progress Area (Hidden initially) -->
+                <div id="download-progress-area" class="hidden mb-8 bg-slate-800/80 p-5 md:p-6 rounded-2xl border border-white/10 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
+                    <div class="flex justify-between items-end mb-3">
+                        <div>
+                            <div class="text-sm font-bold text-white mb-1 flex items-center gap-2">
+                                <i class="fa-solid fa-cloud-arrow-down text-themeBlue animate-bounce"></i> 
+                                <span id="dl-status-text">Starting Engine...</span>
+                            </div>
+                            <div class="text-[11px] text-textDim font-medium" id="dl-stats-text">Chunks: 0 / 0</div>
+                        </div>
+                        <div class="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-themeBlue to-themeBlueHover" id="dl-percentage">0%</div>
+                    </div>
+                    
+                    <div class="progress-container mb-3">
+                        <div class="progress-bar" id="dl-bar"></div>
+                    </div>
+                    
+                    <div class="flex justify-between text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                        <span id="dl-speed">Fetching parts...</span>
+                        <span class="text-themeBlueHover animate-pulse">DO NOT CLOSE TAB</span>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4" id="action-buttons">
+                    <button id="btn-start-download" onclick="fetchQualities()" class="flex-[2] px-6 py-4 rounded-xl font-black text-base bg-themeBlue hover:bg-themeBlueHover text-slate-900 transition-all shadow-[0_0_25px_rgba(56,189,248,0.4)] btn-click-effect flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-download text-xl"></i> FETCH COMPLETE VIDEO
+                    </button>
+                    <button onclick="goBack()" class="flex-1 px-6 py-4 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 transition-colors border border-white/10 text-white btn-click-effect">
+                        Cancel
+                    </button>
+                </div>
+                
+                <!-- Success Message -->
+                <div id="success-msg" class="hidden mt-6 bg-themeGreen/10 border border-themeGreen/30 p-6 rounded-2xl text-center animate-pop-in shadow-[0_0_30px_rgba(16,185,129,0.15)]">
+                    <div class="w-16 h-16 bg-themeGreen/20 rounded-full flex items-center justify-center mx-auto mb-3 text-themeGreen text-3xl shadow-inner">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-1">Download Completed!</h3>
+                    <p class="text-sm text-themeGreen/80 mb-4">The file has been successfully merged and saved to your device's Downloads folder.</p>
+                    <button onclick="goBack()" class="px-6 py-2.5 rounded-lg font-bold text-sm bg-white/10 hover:bg-white/20 transition-colors border border-white/20 text-white btn-click-effect">
+                        Return to Course
+                    </button>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-msg" class="hidden mt-6 bg-red-500/10 border border-red-500/30 p-5 rounded-2xl text-center animate-pop-in">
+                    <i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl mb-2"></i>
+                    <h3 class="font-bold text-white mb-1">Download Failed</h3>
+                    <p class="text-xs text-red-400/80 mb-4" id="error-text">Network error occurred.</p>
+                    <button onclick="window.location.reload()" class="px-5 py-2 rounded-lg font-bold text-xs bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30 btn-click-effect">
+                        Try Again
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Quality Selection Modal -->
+    <div id="quality-modal" class="fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-white/10 rounded-[2rem] p-6 max-w-sm w-full shadow-2xl relative overflow-hidden animate-pop-in flex flex-col max-h-[80vh]">
+            <!-- Decorative blur -->
+            <div class="absolute -top-20 -right-20 w-40 h-40 bg-themeBlue/20 blur-[50px] rounded-full pointer-events-none"></div>
+            
+            <div class="text-center mb-5 relative z-10 shrink-0">
+                <div class="w-14 h-14 bg-themeBlue/10 rounded-full flex items-center justify-center mx-auto mb-3 border border-themeBlue/20">
+                    <i class="fa-solid fa-sliders text-2xl text-themeBlue"></i>
+                </div>
+                <h3 class="text-xl font-bold text-white mb-1">Select Video Quality</h3>
+                <p class="text-xs text-textDim">Choose preferred resolution to download.</p>
+            </div>
+            
+            <!-- Quality List container -->
+            <div id="quality-list" class="flex flex-col gap-3 relative z-10 overflow-y-auto quality-list-scroll pr-1 pb-2">
+                <!-- Buttons injected by JS -->
+            </div>
+            
+            <div class="mt-4 pt-4 border-t border-white/10 relative z-10 shrink-0">
+                <button onclick="closeQualityModal()" class="w-full px-4 py-3 rounded-xl font-bold text-sm bg-white/5 hover:bg-white/10 transition-colors border border-white/10 text-white btn-click-effect">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const BASE_API_URL = "/api/sex"; 
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('courseId');
+        const contentId = urlParams.get('contentId');
+
+        // UI Elements
+        const uiLoading = document.getElementById('loading-state');
+        const uiDownload = document.getElementById('download-ui');
+        
+        const elVideoTitle = document.getElementById('video-title');
+        const elVideoThumbnail = document.getElementById('video-thumbnail');
+        const elContentId = document.getElementById('display-content-id');
+        
+        const uiProgressArea = document.getElementById('download-progress-area');
+        const elBar = document.getElementById('dl-bar');
+        const elPercentage = document.getElementById('dl-percentage');
+        const elStatusText = document.getElementById('dl-status-text');
+        const elStatsText = document.getElementById('dl-stats-text');
+        const elSpeedText = document.getElementById('dl-speed');
+        
+        const btnStart = document.getElementById('btn-start-download');
+        const actionButtons = document.getElementById('action-buttons');
+        const uiSuccess = document.getElementById('success-msg');
+        const uiError = document.getElementById('error-msg');
+        const elErrorText = document.getElementById('error-text');
+
+        // State Variables
+        let videoData = null;
+        let m3u8Url = "";
+        let tsUrls = [];
+        let isDownloading = false;
+        let availableQualities = [];
+
+        function goBack() {
+            if(isDownloading) {
+                if(!confirm("Download is in progress. Are you sure you want to go back? Download will be cancelled.")) {
+                    return;
+                }
+            }
+            if (courseId) {
+                window.location.href = `content.html?id=${courseId}`;
+            } else {
+                window.history.back();
+            }
+        }
+
+        async function init() {
+            if (!courseId || !contentId) {
+                alert("Missing Course ID or Content ID!");
+                goBack();
+                return;
+            }
+            elContentId.innerText = contentId;
+            await fetchVideoDetails();
+        }
+
+        async function fetchVideoDetails() {
+            try {
+                // 🔥 FETCH CALL WITH SECURE KEY AND DEVICE ID (REMOVED) 🔥
+                const fetchUrl = `${BASE_API_URL}?content_id=${contentId}&course_id=${courseId}`;
+
+                const response = await fetch(fetchUrl);
+                
+                if (!response.ok) {
+                    throw new Error("Failed to fetch from API. Server responded with " + response.status);
+                }
+                
+                const json = await response.json();
+                const mediaData = json.decryptedData || json.data || {};
+                
+                // Block if it's DRM protected
+                const isDrmFlag = (mediaData.is_drm == 1 || mediaData.is_drm == '1');
+                const hasDrmDetails = json.drm_details && json.drm_details.status === true;
+                
+                if (isDrmFlag || hasDrmDetails) {
+                     throw new Error("This video is DRM protected and cannot be downloaded.");
+                }
+
+                if (mediaData && mediaData.file_url) {
+                    videoData = mediaData;
+                    m3u8Url = videoData.file_url;
+                    
+                    elVideoTitle.innerText = videoData.title || "Premium Video Course";
+                    elVideoThumbnail.src = videoData.thumbnail || "https://placehold.co/600x400/1e293b/38bdf8?text=Video";
+                    
+                    uiLoading.classList.add('hidden');
+                    uiDownload.classList.remove('hidden');
+                } else {
+                    throw new Error("Invalid video link format from API.");
+                }
+
+            } catch (error) {
+                console.error("Initialization Error:", error);
+                uiLoading.innerHTML = `
+                    <i class="fa-solid fa-shield-halved text-4xl text-red-500 mb-4"></i>
+                    <h2 class="text-xl font-bold text-white mb-2">Access Denied / Error</h2>
+                    <p class="text-sm text-red-400 text-center max-w-sm">${error.message}</p>
+                    <button onclick="goBack()" class="mt-6 px-6 py-2 rounded-lg bg-white/10 text-white font-bold border border-white/20 hover:bg-white/20 transition-all">Go Back</button>
+                `;
+            }
+        }
+
+        async function fetchQualities() {
+            if (isDownloading) return;
+            
+            const originalBtnHTML = btnStart.innerHTML;
+            btnStart.disabled = true;
+            btnStart.innerHTML = `<i class="fa-solid fa-circle-notch animate-spin text-xl"></i> ANALYZING QUALITIES...`;
+            
+            try {
+                let m3u8Response = await fetch(m3u8Url);
+                if (!m3u8Response.ok) throw new Error("Could not access video manifest.");
+                let m3u8Text = await m3u8Response.text();
+                let baseUrl = m3u8Url.substring(0, m3u8Url.lastIndexOf('/') + 1);
+
+                if (m3u8Text.includes('#EXT-X-STREAM-INF')) {
+                    const lines = m3u8Text.split('\n');
+                    availableQualities = [];
+                    
+                    for (let i = 0; i < lines.length; i++) {
+                        let line = lines[i].trim();
+                        if (line.startsWith('#EXT-X-STREAM-INF')) {
+                            // Extract Resolution
+                            let resMatch = line.match(/RESOLUTION=(\d+x\d+)/);
+                            let label = resMatch ? resMatch[1].split('x')[1] + 'p' : `Quality ${availableQualities.length + 1}`;
+                            
+                            // The actual stream URL is the next valid line
+                            let nextLine = lines[i+1] ? lines[i+1].trim() : "";
+                            if (nextLine && !nextLine.startsWith('#')) {
+                                let fullUrl = nextLine.startsWith('http') ? nextLine : baseUrl + nextLine;
+                                availableQualities.push({ 
+                                    label: label, 
+                                    url: fullUrl, 
+                                    originalRes: resMatch ? parseInt(resMatch[1].split('x')[1]) : 0 
+                                });
+                            }
+                        }
+                    }
+
+                    // Sort descending (1080p, 720p, 480p...)
+                    availableQualities.sort((a, b) => b.originalRes - a.originalRes);
+
+                    if (availableQualities.length > 0) {
+                        showQualityModal();
+                    } else {
+                        // Fallback if parsing failed but it was a master playlist
+                        startActualDownload(m3u8Url);
+                    }
+                } else {
+                    // Not a master playlist, it's already a media playlist
+                    startActualDownload(m3u8Url);
+                }
+
+            } catch (err) {
+                console.error("Quality Fetch Error:", err);
+                showError("Failed to fetch video qualities: " + err.message);
+            } finally {
+                btnStart.innerHTML = originalBtnHTML;
+                btnStart.disabled = false;
+            }
+        }
+
+        function showQualityModal() {
+            const listContainer = document.getElementById('quality-list');
+            listContainer.innerHTML = availableQualities.map(q => {
+                return `
+                    <button onclick="selectQuality('${q.url}')" class="px-5 py-4 bg-slate-900/50 hover:bg-themeBlue hover:text-slate-900 transition-all duration-300 rounded-2xl font-bold text-sm border border-white/10 hover:border-themeBlue hover:shadow-[0_0_15px_rgba(56,189,248,0.4)] group flex justify-between items-center text-left btn-click-effect">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-video text-themeBlue group-hover:text-slate-900 transition-colors"></i> 
+                            ${q.label}
+                        </span>
+                        <i class="fa-solid fa-cloud-arrow-down opacity-50 group-hover:opacity-100 transition-opacity"></i>
+                    </button>
+                `;
+            }).join('');
+            
+            document.getElementById('quality-modal').classList.remove('hidden');
+        }
+
+        function closeQualityModal() {
+            document.getElementById('quality-modal').classList.add('hidden');
+        }
+
+        function selectQuality(url) {
+            closeQualityModal();
+            startActualDownload(url);
+        }
+
+        async function startActualDownload(playlistUrl) {
+            if (isDownloading) return;
+            isDownloading = true;
+            
+            // Update UI State
+            btnStart.disabled = true;
+            actionButtons.classList.add('hidden');
+            uiProgressArea.classList.remove('hidden');
+            uiError.classList.add('hidden');
+            
+            try {
+                elStatusText.innerText = "Analyzing Manifest...";
+                
+                // Fetch the actual Media Playlist
+                let m3u8Response = await fetch(playlistUrl);
+                if (!m3u8Response.ok) throw new Error("Could not access quality manifest.");
+                let m3u8Text = await m3u8Response.text();
+                let baseUrl = playlistUrl.substring(0, playlistUrl.lastIndexOf('/') + 1);
+
+                // Extract chunks
+                const lines = m3u8Text.split('\n');
+                tsUrls = [];
+                let isNextLineChunk = false;
+                
+                for (let i = 0; i < lines.length; i++) {
+                    let line = lines[i].trim();
+                    if (line.startsWith('#EXTINF:')) {
+                        isNextLineChunk = true;
+                        continue;
+                    }
+                    if (isNextLineChunk && line && !line.startsWith('#')) {
+                        const finalChunkUrl = line.startsWith('http') ? line : baseUrl + line;
+                        tsUrls.push(finalChunkUrl);
+                        isNextLineChunk = false;
+                    }
+                }
+
+                if (tsUrls.length === 0) {
+                    throw new Error("No video chunks found! Manifest might be DRM protected.");
+                }
+
+                elStatusText.innerText = "Downloading Video Parts...";
+                elSpeedText.innerText = `Total Chunks: ${tsUrls.length}`;
+                
+                await downloadAndMergeChunks(tsUrls);
+
+            } catch (error) {
+                console.error("Download Error:", error);
+                showError("Download Failed: " + error.message);
+            }
+        }
+
+        async function downloadAndMergeChunks(chunks) {
+            let downloadedBuffers = [];
+            const totalChunks = chunks.length;
+            let chunksDownloaded = 0;
+            
+            for (let i = 0; i < totalChunks; i++) {
+                if (!isDownloading) return; // User cancelled
+
+                elStatsText.innerText = `Chunk: ${i + 1} / ${totalChunks}`;
+                
+                try {
+                    const chunkRes = await fetch(chunks[i]);
+                    if (!chunkRes.ok) throw new Error(`HTTP Error ${chunkRes.status} on chunk ${i}`);
+                    
+                    const arrayBuffer = await chunkRes.arrayBuffer();
+                    downloadedBuffers.push(arrayBuffer);
+                    chunksDownloaded++;
+                    
+                    // Update Progress Bar
+                    const percent = ((chunksDownloaded / totalChunks) * 100).toFixed(1);
+                    elBar.style.width = `${percent}%`;
+                    elPercentage.innerText = `${Math.floor(percent)}%`;
+
+                } catch (e) {
+                    throw new Error(`Network drop at chunk ${i+1}. Connection unstable.`);
+                }
+            }
+
+            elStatusText.innerText = "Merging File... (Do not close)";
+            elSpeedText.innerText = "Processing in RAM...";
+            elBar.classList.add('animate-pulse');
+
+            // SetTimeout prevents UI freezing while Blob is being created in RAM
+            setTimeout(() => {
+                try {
+                    // Blob creation wrapper for MP4
+                    const finalBlob = new Blob(downloadedBuffers, { type: 'video/mp4' });
+                    
+                    downloadedBuffers = []; // Free memory
+                    
+                    triggerFileDownload(finalBlob, `${videoData.title.replace(/[^a-z0-9]/gi, '_')}.mp4`);
+                } catch (e) {
+                    showError("Device memory full. Could not merge video file.");
+                }
+            }, 800);
+        }
+
+        function triggerFileDownload(blob, filename) {
+            const blobUrl = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = blobUrl;
+            a.download = filename;
+            document.body.appendChild(a);
+            
+            a.click();
+            
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(blobUrl);
+                
+                isDownloading = false;
+                uiProgressArea.classList.add('hidden');
+                uiSuccess.classList.remove('hidden');
+            }, 1000);
+        }
+
+        function showError(message) {
+            isDownloading = false;
+            uiProgressArea.classList.add('hidden');
+            actionButtons.classList.remove('hidden');
+            btnStart.disabled = false;
+            
+            uiError.classList.remove('hidden');
+            elErrorText.innerText = message;
+        }
+
+        // Run Init
+        init();
+    </script>
+</body>
+</html>

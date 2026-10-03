@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Study Ace | Player</title>
+<!-- Updated Logo -->
+<link rel="icon" href="https://i.ibb.co/sprtw68N/IMG-5850.png" type="image/png">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/shaka-player/4.7.7/shaka-player.ui.min.js"></script>
+<script>
+tailwind.config = { 
+    theme: { 
+        extend: { 
+            colors: { 
+                themeBg: '#0f172a',      /* Slate 900 */
+                cardBg: '#1e293b',       /* Slate 800 */
+                cardHover: '#334155',    /* Slate 700 */
+                themeBlue: '#38bdf8',    /* Asmani Sky Blue */
+                themeBlueHover: '#0ea5e9',
+                themeGreen: '#10B981', 
+                themeRed: '#EF4444', 
+                textDim: '#94a3b8' 
+            }, 
+            fontFamily: { 
+                sans: ['Be Vietnam Pro', 'system-ui', 'sans-serif'], 
+                syne: ['Be Vietnam Pro', 'sans-serif'] 
+            } 
+        } 
+    } 
+};
+</script>
+<script>
+// Anti-DevTools Script
+document.addEventListener('contextmenu', event => event.preventDefault());
+document.onkeydown = function (e) {
+    if (e.keyCode == 123) return false;
+    if (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) return false;
+    if (e.ctrlKey && (e.keyCode == 85)) { window.location.href = "error.html"; return false; }
+};
+(function blockDevTools() {
+    try {
+        var startTime = new Date().getTime();
+        debugger;
+        var endTime = new Date().getTime();
+        if (endTime - startTime > 100) { window.location.href = 'error.html'; }
+        setTimeout(blockDevTools, 500);
+    } catch (e) {}
+})();
+</script>
+<style>
+html, body { background: #0f172a; color: #f8fafc; -webkit-tap-highlight-color: transparent; }
+body::before { content: ""; position: fixed; top: 0; left: 0; right: 0; height: 3px; background: #38bdf8; z-index: 80; }
+.glass-panel { background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5); }
+.btn-click-effect { transition: transform .08s ease; }
+.btn-click-effect:active { transform: scale(.97); }
+.fade-in { animation: fadeIn .3s ease-out forwards; opacity: 0; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+/* PLYR CUSTOMIZATION - SKY BLUE */
+:root { 
+    --plyr-color-main: #38bdf8; 
+    --plyr-video-control-color-hover: #0f172a; 
+    --plyr-video-control-background-hover: #38bdf8; 
+    --plyr-menu-background: #1e293b; 
+    --plyr-menu-color: #f8fafc; 
+    --plyr-tooltip-background: #38bdf8; 
+    --plyr-tooltip-color: #0f172a; 
+    --plyr-menu-radius: 8px; 
+    --plyr-control-radius: 6px; 
+}
+.plyr { border-radius: 12px; width: 100%; height: 100%; background: #000; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5); }
+.plyr__control--overlaid { background: #38bdf8 !important; color: #0f172a !important; padding: 16px !important; box-shadow: 0 0 20px rgba(56, 189, 248, 0.4); }
+.plyr__control--overlaid svg { width: 1.8rem !important; height: 1.8rem !important; }
+.plyr--fullscreen-fallback, .plyr:-webkit-full-screen, .plyr:fullscreen { border-radius: 0 !important; }
+.plyr__controls { background: linear-gradient(to top, rgba(15, 23, 42, .95) 0%, transparent 100%) !important; padding-bottom: calc(15px + env(safe-area-inset-bottom)) !important; }
+.plyr__controls .custom-icon-svg { fill: none !important; }
+.plyr__controls .custom-icon-text { fill: currentColor !important; stroke: none !important; }
+.plyr__progress { flex: 1 1 40% !important; }
+@media (max-width: 768px){ .plyr__volume{max-width: 56px !important; min-width: 36px !important;} .plyr__time{font-size: 11px !important;} }
+
+/* CUSTOM CONTROLS */
+.control-btn { background: #0f172a; color: #94a3b8; border: 1px solid rgba(255,255,255,0.1); padding: .5rem 1rem; border-radius: 8px; font-size: .75rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; }
+.control-btn:hover { background: #334155; color: #fff; border-color: rgba(255,255,255,0.2); }
+.control-btn.active { background: #38bdf8; color: #0f172a; border-color: #38bdf8; box-shadow: 0 0 10px rgba(56, 189, 248, 0.3); }
+input:focus { outline: none; box-shadow: 0 0 0 2px rgba(56, 189, 248, .35); }
+video, iframe { max-width: 100%; }
+</style>
+</head>
+<body class="min-h-screen relative flex flex-col font-sans overflow-x-hidden">
+
+<!-- Global Toast Notification System -->
+<div id="custom-toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[100000] transform translate-y-[-100px] opacity-0 transition-all duration-300 pointer-events-none">
+  <div class="bg-cardBg border border-white/10 shadow-2xl px-4 py-3 rounded-xl flex items-center gap-3 max-w-md">
+    <div id="toast-icon-container" class="w-8 h-8 rounded-lg flex items-center justify-center bg-themeBlue/10 text-themeBlue">
+      <i id="toast-icon" data-lucide="bell" class="w-4 h-4"></i>
+    </div>
+    <p id="toast-msg" class="text-sm font-bold text-white"></p>
+  </div>
+</div>
+
+<nav class="w-full z-40 bg-themeBg/95 backdrop-blur-md border-b border-white/10 h-[64px] sticky top-0">
+  <div class="max-w-[90rem] mx-auto px-4 h-full flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <button onclick="goBack()" class="p-2.5 bg-cardBg border border-white/10 hover:bg-themeBlue hover:text-slate-900 rounded-lg btn-click-effect text-textDim flex items-center gap-2 transition-colors">
+        <i data-lucide="arrow-left" class="w-4 h-4"></i><span class="text-xs font-bold hidden sm:block uppercase tracking-wider">Back</span>
+      </button>
+      <div class="hidden md:flex items-center gap-3">
+        <div class="w-9 h-9 bg-white border border-white/20 rounded-lg flex items-center justify-center overflow-hidden shadow-lg shadow-themeBlue/20">
+            <img src="https://i.ibb.co/sprtw68N/IMG-5850.png" alt="Logo" class="w-full h-full object-contain p-0.5">
+        </div>
+        <h1 class="text-lg font-black text-white tracking-wider">STUDY<span class="text-themeBlue">ACE</span></h1>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 bg-themeBlue/10 border border-themeBlue/20 px-3 py-1.5 rounded-md shadow-sm">
+      <div class="w-1.5 h-1.5 bg-themeBlue rounded-full shadow-[0_0_8px_rgba(56,189,248,0.8)]"></div>
+      <span class="text-[11px] font-bold text-themeBlue tracking-wide uppercase">Player</span>
+    </div>
+  </div>
+</nav>
+
+<main class="flex-1 w-full max-w-6xl mx-auto px-4 py-6 flex flex-col justify-center min-h-[calc(100vh-64px)]">
+  
+  <div id="resolver-overlay" class="hidden flex-col items-center justify-center py-24 fade-in">
+    <div class="w-10 h-10 mb-4 border-[3px] border-white/10 border-t-themeBlue rounded-full animate-spin shadow-[0_0_15px_rgba(56,189,248,0.3)]"></div>
+    <p id="loader-text" class="text-slate-300 font-semibold text-sm">Loading Content...</p>
+  </div>
+  
+  <div id="fallback-state" class="hidden flex-col items-center justify-center py-16 fade-in text-center">
+    <div id="fallback-icon-container" class="w-16 h-16 bg-cardBg border border-white/10 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-themeBlue/5">
+      <i id="fallback-icon" data-lucide="external-link" class="w-7 h-7 text-themeBlue"></i>
+    </div>
+    <h2 id="fallback-title" class="text-xl font-bold text-white mb-2">Content Ready</h2>
+    <p id="fallback-message" class="text-slate-400 text-sm mb-8 max-w-md">Choose how you'd like to open this content.</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md px-4">
+      <button id="fallback-action-btn" class="w-full sm:w-auto bg-themeBlue text-slate-900 hover:bg-themeBlueHover font-bold px-6 py-3 rounded-lg btn-click-effect text-sm flex items-center justify-center gap-2 transition-colors shadow-lg shadow-themeBlue/20">
+        <i data-lucide="external-link" class="w-4 h-4"></i> <span id="fallback-action-text">Open Content</span>
+      </button>
+      <button onclick="goBack()" class="w-full sm:w-auto bg-cardBg text-slate-300 hover:text-white border border-white/10 font-semibold px-6 py-3 rounded-lg btn-click-effect text-sm transition-colors">Go Back</button>
+    </div>
+  </div>
+
+  <div id="player-container" class="hidden flex-col w-full fade-in">
+    <div id="player-wrapper" class="w-full aspect-video relative border border-white/10 mb-5 mx-auto max-w-5xl rounded-xl bg-black overflow-hidden shadow-2xl">
+      <div id="plyr-wrapper" class="w-full h-full hidden absolute inset-0 z-10 overflow-hidden">
+        <video id="plyr-video" class="w-full h-full" playsinline></video>
+      </div>
+      <div id="yt-player" class="w-full h-full hidden absolute inset-0 z-10 pointer-events-auto overflow-hidden"></div>
+    </div>
+    <div class="max-w-5xl w-full mx-auto glass-panel p-5 sm:p-7 rounded-2xl flex flex-col">
+      <div class="flex justify-between items-start">
+        <div>
+          <div class="inline-flex items-center gap-1.5 bg-themeBlue/10 border border-themeBlue/30 px-3 py-1 rounded-md mb-3 shadow-sm">
+            <span class="text-[10px] font-bold text-themeBlue uppercase tracking-widest">Study Ace Player</span>
+          </div>
+          <h1 id="video-title" class="text-xl sm:text-2xl font-bold text-white leading-tight">Loading Title...</h1>
+        </div>
+        <span id="live-badge" class="hidden bg-red-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-md items-center gap-1.5 mt-1 shadow-[0_0_10px_rgba(239,68,68,0.5)]">
+          <span class="w-2 h-2 bg-white rounded-full animate-pulse"></span> LIVE
+        </span>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 mt-6 border-t border-white/10">
+        <div>
+          <div class="text-xs font-bold text-textDim mb-3 flex items-center gap-2 uppercase tracking-wide"><i data-lucide="settings" class="w-4 h-4 text-themeBlue"></i> Video Quality</div>
+          <div id="quality-controls" class="flex flex-wrap gap-2"><span class="text-slate-500 text-xs font-medium bg-themeBg px-3 py-1.5 rounded-lg border border-white/5">Detecting streams...</span></div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-textDim mb-3 flex items-center gap-2 uppercase tracking-wide"><i data-lucide="gauge" class="w-4 h-4 text-themeBlue"></i> Playback Speed</div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="setSpeed(0.5)" data-val="0.5" class="control-btn speed-btn">0.5x</button>
+            <button onclick="setSpeed(1.0)" data-val="1.0" class="control-btn speed-btn active">1.0x</button>
+            <button onclick="setSpeed(1.5)" data-val="1.5" class="control-btn speed-btn">1.5x</button>
+            <button onclick="setSpeed(2.0)" data-val="2.0" class="control-btn speed-btn">2.0x</button>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-bold text-textDim mb-3 flex items-center gap-2 uppercase tracking-wide"><i data-lucide="monitor" class="w-4 h-4 text-themeBlue"></i> Display</div>
+          <button onclick="toggleFullScreen()" class="control-btn w-full flex items-center justify-center gap-2 text-themeBlue border-themeBlue/30 hover:bg-themeBlue/10 hover:border-themeBlue/50 transition-all">
+            <i data-lucide="maximize" class="w-4 h-4"></i> Full Screen
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+// UI/Utility Script (Removed Key Logic)
+lucide.createIcons();
+
+window.showToast = function(message, type = 'info') {
+    const toast = document.getElementById('custom-toast');
+    const toastMsg = document.getElementById('toast-msg');
+    const toastIcon = document.getElementById('toast-icon');
+    const toastIconContainer = document.getElementById('toast-icon-container');
+    
+    toastMsg.innerText = message;
+    
+    if (type === 'error') { 
+        toastIconContainer.className = "w-8 h-8 rounded-lg flex items-center justify-center bg-red-500/10 text-themeRed border border-red-500/20"; 
+        toastIcon.setAttribute('data-lucide', 'alert-triangle'); 
+    } else if (type === 'success') { 
+        toastIconContainer.className = "w-8 h-8 rounded-lg flex items-center justify-center bg-themeGreen/10 text-themeGreen border border-themeGreen/20"; 
+        toastIcon.setAttribute('data-lucide', 'check-circle'); 
+    } else { 
+        toastIconContainer.className = "w-8 h-8 rounded-lg flex items-center justify-center bg-themeBlue/10 text-themeBlue border border-themeBlue/20"; 
+        toastIcon.setAttribute('data-lucide', 'bell'); 
+    }
+    
+    lucide.createIcons({root: toastIconContainer});
+    
+    toast.classList.remove('opacity-0', 'translate-y-[-100px]', 'pointer-events-none');
+    toast.classList.add('opacity-100', 'translate-y-0');
+    
+    setTimeout(() => { 
+        toast.classList.add('opacity-0', 'translate-y-[-100px]', 'pointer-events-none'); 
+        toast.classList.remove('opacity-100', 'translate-y-0'); 
+    }, 3000);
+};
+
+// Start logic immediately on load (Auth Guard is gone)
+document.addEventListener('DOMContentLoaded', () => {
+    if(typeof window.startPlayerLogic === 'function') {
+        window.startPlayerLogic();
+    }
+});
+</script>
+
+<script type="module" id="app-logic">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-analytics.js";
+import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/12.16.0/firebase-firestore.js";
+
+const firebaseConfig = { apiKey:"AIzaSyDzofhvQGWmgJAZbHGUVn96dITkrPPlu8Q", authDomain:"stechshope.firebaseapp.com", projectId:"stechshope", storageBucket:"stechshope.firebasestorage.app", messagingSenderId:"36268384431", appId:"1:36268384431:web:629dc783a1d427237b745a", measurementId:"G-WRRR9XRVH8" };
+const app = initializeApp(firebaseConfig, "mainApp");
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
+const API_ENDPOINT = "https://smex.dream-neet100.workers.dev";
+const urlParams = new URLSearchParams(window.location.search);
+const COURSE_ID = urlParams.get('courseId') || urlParams.get('id');
+const CONTENT_ID = urlParams.get('contentId');
+
+window.playerInstance = null; 
+window.hlsInstance = null; 
+window.shakaInstance = null;
+
+window.goBack = function() { 
+    if (COURSE_ID) { window.location.href = `content.html?id=${COURSE_ID}`; } 
+    else { window.location.href = 'index.html'; } 
+};
+
+function showState(stateId) {
+    ['resolver-overlay', 'fallback-state', 'player-container'].forEach(id => {
+        const el = document.getElementById(id);
+        if (id === stateId) { el.classList.remove('hidden'); el.classList.add('flex'); }
+        else { el.classList.add('hidden'); el.classList.remove('flex'); }
+    });
+}
+
+window.startPlayerLogic = function() {
+    if (!COURSE_ID || !CONTENT_ID) { 
+        window.showToast("Course ID or Content ID is missing in the URL!", 'error'); 
+        setTimeout(window.goBack, 3000); 
+        return; 
+    }
+    document.getElementById('loader-text').innerText = "Fetching Media Content...";
+    showState('resolver-overlay');
+    resolveAndPlay();
+};
+
+window.deepFindUrl = function(obj) {
+    if (!obj) return null;
+    const commonKeys = ['file_url', 'url', 'link', 'pdf_link', 'videoUrl', 'aws_url', 'pdf_url'];
+    for (const key of commonKeys) { 
+        if (obj[key] && typeof obj[key] === 'string' && obj[key].length > 5) { return obj[key]; } 
+    }
+    if (typeof obj === 'object') { 
+        for (const key in obj) { 
+            if (typeof obj[key] === 'object') { 
+                const found = window.deepFindUrl(obj[key]); 
+                if (found) return found; 
+            } 
+        } 
+    }
+    return null;
+};
+
+window.showFallbackState = function(message, iconName, title, actionText, targetUrl) {
+    showState('fallback-state');
+    const fallbackEl = document.getElementById('fallback-state');
+    const iconEl = document.getElementById('fallback-icon');
+    document.getElementById('fallback-message').innerText = message;
+    document.getElementById('fallback-title').innerText = title;
+    document.getElementById('fallback-action-text').innerText = actionText;
+    document.getElementById('fallback-action-btn').onclick = function() { window.location.href = targetUrl; };
+    try {
+        iconEl.setAttribute('data-lucide', (iconName === 'youtube' || iconName === 'file-text') ? iconName : 'external-link');
+        lucide.createIcons({root: fallbackEl});
+    } catch(e) {}
+};
+
+async function resolveAndPlay() {
+    try {
+        // 🔥 REMOVED KEY & DEVICE ID LOGIC HERE 🔥
+        const fetchUrl = `${API_ENDPOINT}?content_id=${CONTENT_ID}&course_id=${COURSE_ID}`;
+        
+        const response = await fetch(fetchUrl, { method: "GET" });
+        if (!response.ok) {
+            let errorMsg = "Failed to fetch content.";
+            try { const errData = await response.json(); if(errData.reason) errorMsg = errData.reason; } catch(e) {}
+            window.showToast(errorMsg, 'error');
+            setTimeout(() => { goBack(); }, 2000); 
+            return;
+        }
+        
+        const result = await response.json();
+        const mediaData = result.decryptedData || result.data || {};
+        
+        const hasDrmDetails = result.drm_details && result.drm_details.status === true && result.drm_details.data && result.drm_details.data.link && result.drm_details.data.link.file_url;
+        const finalUrl = hasDrmDetails ? result.drm_details.data.link.file_url : (mediaData.file_url || window.deepFindUrl(mediaData));
+        const drmToken = hasDrmDetails ? result.drm_details.data.link.token : null;
+        
+        if (!finalUrl || finalUrl === "") { window.showToast("Media not found.", 'error'); setTimeout(goBack, 1500); return; }
+        
+        const lowerUrl = finalUrl.toLowerCase();
+        const title = mediaData.title || "Premium Video";
+        const isLive = mediaData.is_live === 1;
+        const isPdf = mediaData.file_type === 1 || lowerUrl.includes('.pdf');
+        const isYouTube = mediaData.video_type === 1 || lowerUrl.includes('youtube.com') || lowerUrl.includes('youtu.be') || (!lowerUrl.startsWith('http') && finalUrl !== '');
+        
+        try {
+            const dbDocRef = doc(db, "Courses", COURSE_ID, "contents", CONTENT_ID);
+            await setDoc(dbDocRef, { course_id: COURSE_ID, content_id: CONTENT_ID, title: title, file_url: finalUrl, thumbnail: mediaData.thumbnail || "", duration: mediaData.duration || "0", is_live: isLive, file_type: isPdf ? "pdf" : (isYouTube ? "youtube" : "video"), saved_at: new Date().toISOString() }, { merge: true });
+        } catch (fbError) {}
+
+        if (isPdf) { window.showFallbackState("This is a PDF document. Please click below to view.", "file-text", "PDF Document Ready", "Open PDF", finalUrl); return; }
+        if (isYouTube) { initYouTubePlayer(finalUrl, title, isLive); return; }
+        if (!lowerUrl.includes('.mp4') && !lowerUrl.includes('.m3u8') && !lowerUrl.includes('.mpd')) { window.showFallbackState("This format is not supported in the video player. Please open directly.", "external-link", "Content Ready", "Open Content", finalUrl); return; }
+        
+        const poster = (mediaData.thumbnail && mediaData.thumbnail.trim() !== "") ? mediaData.thumbnail : "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=1200&q=80";
+        if (lowerUrl.includes('.mpd') || hasDrmDetails) { initShakaPlayer(finalUrl, drmToken, title, poster, isLive); }
+        else { initVideoPlayer(finalUrl, title, poster, isLive); }
+    } catch(err) {
+        console.error("Resolver Error:", err);
+        const isFallbackVisible = !document.getElementById('fallback-state').classList.contains('hidden');
+        if (!isFallbackVisible) { window.showToast("Server Error fetching video stream.", 'error'); setTimeout(goBack, 1500); }
+    }
+}
+
+async function initShakaPlayer(manifestUri, token, title, poster, isLive) {
+    showState('player-container');
+    document.getElementById('video-title').innerText = title;
+    if (isLive) { document.getElementById('live-badge').classList.remove('hidden'); document.getElementById('live-badge').classList.add('flex'); }
+    document.getElementById('plyr-wrapper').classList.remove('hidden');
+    document.getElementById('yt-player').classList.add('hidden');
+    const video = document.getElementById('plyr-video');
+    video.poster = poster;
+    if (window.playerInstance) window.playerInstance.destroy();
+    if (window.hlsInstance) window.hlsInstance.destroy();
+    shaka.polyfill.installAll();
+    
+    if (!shaka.Player.isBrowserSupported()) { window.showFallbackState("Browser does not support Shaka Player DRM.", "alert-triangle", "DRM Error", "Go Back", "javascript:goBack()"); return; }
+    window.shakaInstance = new shaka.Player(video);
+    const config = { streaming: { bufferingGoal: 30, rebufferingGoal: 2, jumpLargeGaps: true } };
+    
+    if (token) {
+        const licenseUrl = "https://license.videocrypt.com/validateLicense?pallyconCustomdataV2=" + encodeURIComponent(token);
+        config.drm = { servers: { 'com.widevine.alpha': licenseUrl, 'com.microsoft.playready': licenseUrl } };
+    }
+    window.shakaInstance.configure(config);
+    window.shakaInstance.addEventListener('error', (e) => { console.error("Shaka Error:", e); });
+    
+    try {
+        await window.shakaInstance.load(manifestUri);
+        window.playerInstance = new Plyr(video, { controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'current-time', 'duration', 'mute', 'volume', 'fullscreen'], seekTime: 10, autoplay: true, keyboard: { focused: true, global: true } });
+        setupCustomPlyr(window.playerInstance);
+        const qualityContainer = document.getElementById('quality-controls');
+        if (qualityContainer) qualityContainer.innerHTML = `<span class="text-slate-400 text-xs font-medium bg-themeBg px-3 py-1.5 rounded-lg border border-white/5">Auto Adaptive (DRM)</span>`;
+    } catch (e) {
+        console.error("DRM Load Error:", e);
+        window.showFallbackState("License fetch failed or Invalid MPD stream.", "alert-triangle", "Stream Error", "Go Back", "javascript:goBack()");
+    }
+}
+
+function getYouTubeID(url) {
+    if (!url) return null;
+    if (/^[a-zA-Z0-9_-]{11}$/.test(url)) return url;
+    let match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=|live\/|shorts\/))([^?&#]+)/);
+    return match ? match[1] : url;
+}
+
+function initYouTubePlayer(sourceUrl, title, isLive) {
+    showState('player-container');
+    document.getElementById('video-title').innerText = title;
+    if (isLive) { document.getElementById('live-badge').classList.remove('hidden'); document.getElementById('live-badge').classList.add('flex'); }
+    document.getElementById('plyr-wrapper').classList.add('hidden');
+    const ytContainer = document.getElementById('yt-player');
+    ytContainer.classList.remove('hidden');
+    const ytId = getYouTubeID(sourceUrl);
+    ytContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=1&rel=0&modestbranding=1&playsinline=1" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+}
+
+function initVideoPlayer(sourceUrl, title, poster, isLive) {
+    showState('player-container');
+    document.getElementById('video-title').innerText = title;
+    if (isLive) { document.getElementById('live-badge').classList.remove('hidden'); document.getElementById('live-badge').classList.add('flex'); }
+    document.getElementById('plyr-wrapper').classList.remove('hidden');
+    document.getElementById('yt-player').classList.add('hidden');
+    const video = document.getElementById('plyr-video');
+    video.poster = poster;
+    if (window.playerInstance) { window.playerInstance.destroy(); }
+    if (window.hlsInstance) { window.hlsInstance.destroy(); }
+    if (window.shakaInstance) { window.shakaInstance.destroy(); }
+    
+    const defaultOptions = { controls: ['play-large', 'rewind', 'play', 'fast-forward', 'progress', 'current-time', 'duration', 'mute', 'volume', 'fullscreen'], seekTime: 10, autoplay: true, keyboard: { focused: true, global: true } };
+    
+    if (sourceUrl.includes('.m3u8') && Hls.isSupported()) {
+        const hls = new Hls({ maxBufferLength: 60 });
+        hls.loadSource(sourceUrl);
+        hls.on(Hls.Events.MANIFEST_PARSED, function () {
+            const qualityContainer = document.getElementById('quality-controls');
+            if (qualityContainer) {
+                let html = `<button onclick="setQuality(-1)" class="control-btn quality-btn active" data-val="-1">Auto</button>`;
+                hls.levels.forEach((l, idx) => { html += `<button onclick="setQuality(${idx})" class="control-btn quality-btn" data-val="${idx}">${l.height}p</button>`; });
+                qualityContainer.innerHTML = html;
+            }
+            window.playerInstance = new Plyr(video, defaultOptions);
+            setupCustomPlyr(window.playerInstance);
+        });
+        hls.attachMedia(video);
+        window.hlsInstance = hls;
+    } else {
+        video.src = sourceUrl;
+        const qualityContainer = document.getElementById('quality-controls');
+        if (qualityContainer) qualityContainer.innerHTML = `<span class="text-slate-400 text-xs font-medium bg-themeBg px-3 py-1.5 rounded-lg border border-white/5">Auto (Native)</span>`;
+        window.playerInstance = new Plyr(video, defaultOptions);
+        setupCustomPlyr(window.playerInstance);
+    }
+    lucide.createIcons();
+}
+
+function setupCustomPlyr(player) {
+    player.on('ready', () => {
+        const rewindBtn = document.querySelector('[data-plyr="rewind"]');
+        if (rewindBtn) rewindBtn.innerHTML = `<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="custom-icon-svg" style="width:22px;height:22px;margin:auto;"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><text x="12" y="16.5" font-size="7" font-weight="900" font-family="sans-serif" class="custom-icon-text" text-anchor="middle">10</text></svg>`;
+        const forwardBtn = document.querySelector('[data-plyr="fast-forward"]');
+        if (forwardBtn) forwardBtn.innerHTML = `<svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="custom-icon-svg" style="width:22px;height:22px;margin:auto;"><path d="M21 12a9 9 0 1 1-9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><text x="12" y="16.5" font-size="7" font-weight="900" font-family="sans-serif" class="custom-icon-text" text-anchor="middle">10</text></svg>`;
+    });
+    player.on('enterfullscreen', () => { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(()=>{}); } catch (e) {} });
+    player.on('exitfullscreen', () => { try { if (screen.orientation && screen.orientation.unlock) screen.orientation.unlock(); } catch (e) {} });
+}
+
+window.setQuality = function(index) {
+    if(window.hlsInstance) {
+        window.hlsInstance.currentLevel = index;
+        document.querySelectorAll('.quality-btn').forEach(btn => { 
+            if (parseInt(btn.dataset.val) === index) btn.classList.add('active'); 
+            else btn.classList.remove('active'); 
+        });
+    }
+};
+
+window.setSpeed = function(speed) {
+    if (window.playerInstance) window.playerInstance.speed = speed;
+    const video = document.getElementById('plyr-video');
+    if (video) video.playbackRate = speed;
+    document.querySelectorAll('.speed-btn').forEach(btn => { 
+        if (parseFloat(btn.dataset.val) === speed) btn.classList.add('active'); 
+        else btn.classList.remove('active'); 
+    });
+};
+
+window.toggleFullScreen = function() {
+    const playerContainer = document.querySelector('.plyr') || document.getElementById('plyr-video');
+    const videoEl = document.getElementById('plyr-video');
+    if (!playerContainer) return;
+    
+    if (videoEl && typeof videoEl.webkitEnterFullscreen === 'function') { 
+        videoEl.webkitEnterFullscreen(); return; 
+    }
+    if (!document.fullscreenElement && !document.webkitFullscreenElement) {
+        if (playerContainer.requestFullscreen) { 
+            playerContainer.requestFullscreen().catch(() => { if (videoEl && videoEl.webkitEnterFullscreen) videoEl.webkitEnterFullscreen(); }); 
+        }
+        else if (playerContainer.webkitRequestFullscreen) { playerContainer.webkitRequestFullscreen(); }
+        else if (playerContainer.msRequestFullscreen) { playerContainer.msRequestFullscreen(); }
+    } else {
+        if (document.exitFullscreen) { document.exitFullscreen(); }
+        else if (document.webkitExitFullscreen) { document.webkitExitFullscreen(); }
+    }
+};
+
+window.addEventListener('beforeunload', () => {
+    if (window.playerInstance) { window.playerInstance.destroy(); }
+    if (window.hlsInstance) { window.hlsInstance.destroy(); }
+    if (window.shakaInstance) { window.shakaInstance.destroy(); }
+});
+</script>
+</body>
+</html>

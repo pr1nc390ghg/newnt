@@ -1,0 +1,94 @@
+/**
+ * VideoCrypt DRM Link Extractor API
+ * URL Structure: https://your-worker-url.com/{vdc_id}
+ * Example: https://vi.smexfot.workers.dev/4590192_0_4996064652567979
+ */
+
+export default {
+    async fetch(request, env, ctx) {
+        // 1. CORS Setup (Allow all origins so it can be called from frontend)
+        const corsHeaders = {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+        };
+
+        // Handle CORS Preflight request
+        if (request.method === "OPTIONS") {
+            return new Response(null, { headers: corsHeaders });
+        }
+
+        // 2. Extract vdc_id from URL Path
+        const url = new URL(request.url);
+        // split('/') karega toh empty string aur id aayegi, filter(Boolean) usme se bas ID nikal lega
+        const pathParts = url.pathname.split('/').filter(Boolean);
+        const vdcId = pathParts.length > 0 ? pathParts[0] : null;
+
+        // Agar user ne bina ID ke base URL hit kiya
+        if (!vdcId) {
+            return new Response(JSON.stringify({
+                success: false,
+                error: "Invalid Request",
+                message: "URL format should be: /<vdc_id>. Example: /4590192_0_4996064652567979"
+            }, null, 2), {
+                status: 400,
+                headers: { "Content-Type": "application/json", ...corsHeaders }
+            });
+        }
+
+        // 3. API & Auth Details (Headers)
+        const drmApiUrl = `https://api.videocrypt.com/getVideoDetailsDrm`;
+        const drmHeaders = {
+            'accept': 'application/json, text/plain, */*',
+            'accesskey': 'WEU1QzAxMjZVRzlLUVJKTjNCTDc=',
+            'account-id': '10004141',
+            'content-type': 'application/json',
+            'device-id': '71d3548555586126ed7071102e663619',
+            'device-name': '1',
+            'device-type': '1',
+            'origin': 'https://nexttoppers.com',
+            'referer': 'https://nexttoppers.com/',
+            'secretkey': 'QVZNditHMENJZDFGYlIvUUt1VG9Zd081WEhqZm44dERQMzdKTnFaNA==',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+            'user-id': '3875028',
+            'version': '1'
+        };
+
+        try {
+            // 4. Hit VideoCrypt API securely from Backend
+            const drmResponse = await fetch(drmApiUrl, {
+                method: 'POST',
+                headers: drmHeaders,
+                body: JSON.stringify({ name: vdcId, flag: 1 }) // flag: 1 indicates HLS stream request
+            });
+
+            // Parse response
+            const drmDetails = await drmResponse.json();
+
+            // 5. Return Clean Response to the user
+            return new Response(JSON.stringify({
+                success: true,
+                extracted_id: vdcId,
+                data: drmDetails
+            }, null, 2), {
+                status: 200,
+                headers: {
+                    "Content-Type": "application/json",
+                    "Cache-Control": "public, max-age=300", // Cache for 5 mins to save API hits
+                    ...corsHeaders
+                }
+            });
+
+        } catch (err) {
+            // Error Handling
+            return new Response(JSON.stringify({
+                success: false,
+                error: "Failed to fetch details from VideoCrypt API",
+                details: err.message
+            }, null, 2), {
+                status: 500,
+                headers: { "Content-Type": "application/json", ...corsHeaders }
+            });
+        }
+    }
+};

@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Study Ace - Course Content</title>
+    <!-- Updated Favicon -->
+    <link rel="icon" href="https://i.ibb.co/sprtw68N/IMG-5850.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Cloudflare Turnstile API -->
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        themeBg: '#0f172a',     /* Slate 900 */ 
+                        cardBg: '#1e293b',      /* Slate 800 */
+                        cardHover: '#334155',   /* Slate 700 */
+                        themeBlue: '#38bdf8',   /* Asmani Sky Blue */
+                        themeBlueHover: '#0ea5e9',
+                        themeGreen: '#10B981',
+                        textDim: '#94a3b8'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        syne: ['Syne', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@600;700;800&display=swap');
+        
+        /* Clean Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: #0f172a; 
+            color: #f8fafc;
+            -webkit-tap-highlight-color: transparent;
+            height: 100vh; 
+            height: 100dvh; 
+            overscroll-behavior-y: none;
+            -webkit-overflow-scrolling: touch;
+        }
+        
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+
+        /* Clean Card Styling - Updated for Sky Blue */
+        .glass-card { 
+            background-color: #1e293b; 
+            border: 1px solid rgba(255,255,255,0.08); 
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(56, 189, 248, 0.4);
+            box-shadow: 0 12px 40px -10px rgba(56, 189, 248, 0.15);
+        }
+
+        .btn-click-effect { transition: transform 0.1s ease-in-out; }
+        .btn-click-effect:active { transform: scale(0.95); }
+
+        /* Subtle Fade In */
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .animate-pop-in {
+            animation: fadeIn 0.4s ease-out forwards;
+            opacity: 0;
+        }
+        
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Test Engine Specific Styling - Updated colors */
+        .question-html p { margin-bottom: 0.5rem; }
+        .question-html img { max-width: 100%; height: auto; border-radius: 8px; margin: 12px 0; }
+        .custom-radio { display: none; }
+        .custom-radio + label {
+            display: flex;
+            align-items: center;
+            padding: 14px 16px;
+            background: #1e293b;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        .custom-radio:hover + label {
+            background: #334155;
+        }
+        .custom-radio:checked + label {
+            background: rgba(56, 189, 248, 0.1);
+            border-color: #38bdf8;
+        }
+        .custom-radio + label .radio-circle {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid #64748b;
+            margin-right: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: border-color 0.2s ease;
+        }
+        .custom-radio:checked + label .radio-circle { border-color: #38bdf8; }
+        .custom-radio:checked + label .radio-circle::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: #38bdf8;
+            border-radius: 50%;
+        }
+        .pb-safe { padding-bottom: env(safe-area-inset-bottom, 20px); }
+
+        .nav-glass {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+    </style>
+</head>
+<body class="flex flex-col relative overflow-hidden">
+
+    <!-- INVISIBLE TURNSTILE WIDGET (PRE-CLEARANCE) -->
+    <div class="cf-turnstile" 
+         data-sitekey="0x4AAAAAAED8LFasjwHmTKOR" 
+         data-action="api_request"
+         data-execution="execute"
+         style="display:none;">
+    </div>
+
+    <header class="nav-glass px-4 py-3 sticky top-0 z-50 flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-4 md:gap-6">
+            <button onclick="window.location.href='index.html'" class="flex items-center gap-2 text-textDim hover:text-white transition-colors text-sm font-semibold btn-click-effect">
+                <i class="fa-solid fa-arrow-left"></i> <span class="hidden md:inline">Back</span>
+            </button>
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 md:w-9 md:h-9 bg-white border border-white/20 rounded-lg flex items-center justify-center overflow-hidden shadow-lg shadow-themeBlue/20">
+                    <img src="https://i.ibb.co/sprtw68N/IMG-5850.png" alt="Study Ace Logo" class="w-full h-full object-contain p-0.5">
+                </div>
+                <h1 class="text-lg font-bold tracking-wider text-white font-syne">STUDY<span class="text-themeBlue">ACE</span></h1>
+            </div>
+        </div>
+        <div class="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 rounded-md border border-green-500/20 text-[10px] md:text-xs font-semibold text-green-400 uppercase tracking-wide">
+            <div class="w-1.5 h-1.5 rounded-full bg-green-400 shadow-[0_0_8px_rgba(74,222,128,0.8)]"></div>
+            Enrolled
+        </div>
+    </header>
+
+    <main class="max-w-[1400px] w-full mx-auto p-4 md:p-6 flex-1 relative z-10 flex flex-col overflow-y-auto pb-safe">
+        
+        <!-- =================== FOLDER/CONTENT VIEW =================== -->
+        <div id="view-content" class="w-full flex flex-col flex-1 animate-fade-in hidden pb-12">
+            
+            <div id="course-banner" class="bg-cardBg border border-white/10 rounded-2xl p-6 md:p-8 flex flex-col-reverse md:flex-row items-center justify-between gap-8 mb-8 hidden shadow-xl relative overflow-hidden">
+                <div class="absolute -top-32 -left-32 w-64 h-64 bg-themeBlue/20 blur-[120px] rounded-full pointer-events-none"></div>
+                
+                <div class="flex flex-col items-start gap-3 flex-1 w-full relative z-10">
+                    <span class="text-xs font-medium text-themeBlue uppercase tracking-wider bg-themeBlue/10 px-2 py-1 rounded border border-themeBlue/20">Premium Course</span>
+                    <h2 id="course-title" class="text-2xl md:text-4xl font-bold text-white leading-tight">
+                        Loading Batch...
+                    </h2>
+                </div>
+                <div class="w-full md:w-auto shrink-0 flex justify-center md:justify-end relative z-10">
+                    <img id="course-thumb" src="" alt="Thumbnail" class="w-full max-w-[300px] rounded-xl border border-white/10 object-cover aspect-[16/9] hidden shadow-lg">
+                </div>
+            </div>
+
+            <div class="flex gap-6 md:gap-8 border-b border-white/10 mb-6 overflow-x-auto scrollbar-hide w-full shrink-0">
+                <button id="tab-overview" onclick="switchTab('overview')" class="pb-3 text-sm md:text-base font-semibold flex items-center gap-2 text-themeBlue border-b-2 border-themeBlue transition-colors whitespace-nowrap btn-click-effect shrink-0">
+                    <i class="fa-solid fa-circle-info"></i> Overview
+                </button>
+                <button id="tab-content" onclick="switchTab('content')" class="pb-3 text-sm md:text-base font-semibold flex items-center gap-2 text-textDim hover:text-white border-b-2 border-transparent transition-colors whitespace-nowrap btn-click-effect shrink-0">
+                    <i class="fa-regular fa-folder-open"></i> Content
+                </button>
+                <button id="tab-live" onclick="window.location.href='live.html?id=' + courseId" class="pb-3 text-sm md:text-base font-semibold flex items-center gap-2 text-textDim hover:text-white border-b-2 border-transparent transition-colors whitespace-nowrap btn-click-effect shrink-0">
+                    <i class="fa-solid fa-video"></i> Live Classes
+                </button>
+            </div>
+
+            <div id="loader" class="flex flex-col justify-center items-center py-20 hidden">
+                <i class="fa-solid fa-circle-notch fa-spin text-3xl text-themeBlue mb-3"></i>
+                <p class="text-slate-400 text-sm font-medium">Loading content...</p>
+            </div>
+
+            <!-- OVERVIEW SECTION -->
+            <div id="section-overview" class="hidden">
+                <div class="bg-cardBg border border-white/10 rounded-xl p-6 md:p-8 text-slate-300 leading-relaxed text-sm md:text-base prose prose-invert max-w-none prose-a:text-themeBlue" id="course-desc-content">
+                    <p class="animate-pulse">Loading description...</p>
+                </div>
+            </div>
+
+            <!-- CONTENT SECTION -->
+            <div id="section-content" class="hidden flex-col h-full">
+                <!-- Breadcrumbs -->
+                <div class="mb-5 bg-cardBg p-3 rounded-lg flex items-center overflow-x-auto whitespace-nowrap scrollbar-hide border border-white/10 shadow-inner">
+                    <div id="breadcrumbs" class="flex items-center text-xs md:text-sm font-medium text-textDim px-1">
+                        <!-- Injected by JS -->
+                    </div>
+                </div>
+
+                <!-- Content Grid -->
+                <div id="content-grid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-5">
+                    <!-- Items Injected by JS -->
+                </div>
+
+                <!-- Empty State -->
+                <div id="empty-state" class="hidden flex-col items-center justify-center py-20 text-center">
+                    <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 border border-white/10">
+                        <i class="fa-regular fa-folder-open text-2xl text-slate-500"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-1">Folder is Empty</h3>
+                    <p class="text-sm text-textDim">No content available here yet.</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- =================== EXAM INSTRUCTIONS VIEW =================== -->
+        <div id="view-instructions" class="max-w-[800px] mx-auto w-full flex-1 animate-fade-in hidden flex-col pb-safe">
+            <div class="bg-cardBg border border-white/10 rounded-2xl p-6 md:p-8 flex-1 flex flex-col shadow-xl">
+                <div class="flex items-center gap-4 mb-6 pb-6 border-b border-white/10">
+                    <div class="w-12 h-12 bg-themeBlue/10 rounded-lg flex items-center justify-center border border-themeBlue/20 shrink-0">
+                        <i class="fa-solid fa-clipboard-list text-themeBlue text-xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-white leading-tight" id="inst-test-name">Test Name</h2>
+                        <p class="text-sm text-textDim mt-1"><i class="fa-regular fa-clock mr-1"></i> <span id="inst-test-time">0</span> Mins Duration</p>
+                    </div>
+                </div>
+                
+                <h3 class="text-lg font-semibold mb-3 text-white">Instructions</h3>
+                <div class="flex-1 overflow-y-auto pr-2 prose prose-invert max-w-none text-slate-300 text-sm space-y-3" id="inst-content">
+                    Loading instructions...
+                </div>
+
+                <div class="mt-8 pt-6 border-t border-white/10 flex flex-col sm:flex-row justify-end gap-3 w-full">
+                    <button onclick="closeInstructions()" class="px-6 py-2.5 rounded-lg font-medium text-sm bg-white/5 hover:bg-white/10 transition-colors text-white btn-click-effect border border-white/5">Cancel</button>
+                    <button onclick="fetchTestDataAndStart()" class="px-6 py-2.5 rounded-lg font-bold text-sm bg-themeBlue hover:bg-themeBlueHover text-slate-900 transition-colors btn-click-effect shadow-[0_0_15px_rgba(56,189,248,0.3)]">
+                        Start Assessment
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- =================== EXAM LIVE VIEW =================== -->
+        <div id="view-exam" class="max-w-[800px] mx-auto w-full flex-1 animate-fade-in hidden flex-col h-[85vh] pb-safe pt-2">
+            <div class="flex flex-col h-full bg-cardBg border border-white/10 rounded-2xl overflow-hidden shadow-xl">
+                <div class="flex justify-between items-center p-4 border-b border-white/10 bg-slate-800 shrink-0">
+                    <h2 class="text-sm md:text-base font-semibold truncate pr-4 text-gray-200" id="exam-test-name">Test Name</h2>
+                    <div class="flex items-center gap-3 shrink-0">
+                        <div class="bg-slate-900 text-white px-3 py-1.5 rounded text-sm font-mono border border-white/10 flex items-center gap-2">
+                            <i class="fa-regular fa-clock text-themeBlue"></i> <span id="exam-timer">00:00:00</span>
+                        </div>
+                        <button onclick="showSubmitModal()" class="bg-white/10 hover:bg-white/20 text-white px-4 py-1.5 rounded text-sm font-semibold transition-colors btn-click-effect">
+                            Submit
+                        </button>
+                    </div>
+                </div>
+
+                <div class="flex-1 overflow-y-auto p-5 md:p-8 bg-themeBg" id="question-render-area">
+                    <!-- Question injected here -->
+                </div>
+
+                <div class="p-4 border-t border-white/10 bg-slate-800 flex justify-between gap-3 shrink-0">
+                    <div class="flex gap-2 w-1/2">
+                        <button onclick="prevQuestion()" id="btn-prev" class="px-4 py-2.5 bg-white/5 hover:bg-white/10 rounded-lg font-medium text-sm transition-colors text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed btn-click-effect border border-white/5">
+                            Previous
+                        </button>
+                        <button onclick="clearResponse()" class="px-4 py-2.5 text-slate-400 hover:text-white rounded-lg font-medium text-sm transition-colors btn-click-effect">
+                            Clear
+                        </button>
+                    </div>
+                    <div class="flex gap-2 w-1/2 justify-end">
+                        <button onclick="saveAndNext()" id="btn-next" class="px-6 py-2.5 bg-themeBlue text-slate-900 hover:bg-themeBlueHover rounded-lg font-bold text-sm transition-colors btn-click-effect shadow-md">
+                            Save & Next
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- =================== RESULTS DASHBOARD =================== -->
+        <div id="view-result" class="max-w-[800px] mx-auto w-full flex-1 animate-fade-in hidden pb-12 pt-4">
+            <!-- Results injected here -->
+        </div>
+
+    </main>
+
+    <!-- Overlay Modals -->
+    <div id="submit-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-white/10 rounded-2xl p-6 max-w-sm w-full text-center shadow-2xl">
+            <h3 class="text-xl font-bold text-white mb-2">Submit Assessment</h3>
+            <p class="text-textDim text-sm mb-6">Are you sure you want to submit? You cannot change answers after submission.</p>
+            
+            <div class="flex gap-3 justify-center w-full">
+                <button onclick="closeSubmitModal()" class="flex-1 px-4 py-2.5 rounded-lg font-medium text-sm bg-white/5 hover:bg-white/10 transition-colors text-white btn-click-effect border border-white/10">Cancel</button>
+                <button onclick="submitTestToApi()" class="flex-1 px-4 py-2.5 rounded-lg font-bold text-sm bg-themeBlue hover:bg-themeBlueHover text-slate-900 transition-colors btn-click-effect shadow-[0_0_15px_rgba(56,189,248,0.3)]">
+                    Submit
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Video Options Modal -->
+    <div id="video-options-modal" class="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-cardBg border border-white/10 rounded-2xl p-6 max-w-xs w-full text-center shadow-2xl">
+            <h3 class="text-lg font-bold text-white mb-4">Video Options</h3>
+            <div class="flex flex-col gap-2.5 w-full">
+                <button id="btn-play-video" class="w-full px-4 py-2.5 rounded-lg font-semibold text-sm bg-themeBlue hover:bg-themeBlueHover text-slate-900 transition-colors btn-click-effect flex items-center justify-center gap-2 shadow-md">
+                    <i class="fa-solid fa-play"></i> Watch Now
+                </button>
+                <button id="btn-download-video" class="w-full px-4 py-2.5 rounded-lg font-semibold text-sm bg-white/10 hover:bg-white/20 transition-colors text-white btn-click-effect flex items-center justify-center gap-2 border border-white/5">
+                    <i class="fa-solid fa-download"></i> Download
+                </button>
+                <button onclick="closeVideoOptions()" class="w-full mt-2 px-4 py-2 rounded-lg font-medium text-sm text-slate-400 hover:text-white transition-colors btn-click-effect">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="exam-loading-modal" class="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-md hidden flex items-center justify-center flex-col">
+        <i class="fa-solid fa-circle-notch fa-spin text-3xl text-themeBlue mb-4"></i>
+        <h2 class="text-sm font-semibold text-white tracking-wide" id="exam-loading-text">Processing...</h2>
+    </div>
+
+    <script>
+        // =========================================
+        // 🔥 SMART FALLBACK API SYSTEM 🔥
+        // =========================================
+        const PRIMARY_API = '/api/nig'; 
+        const FALLBACK_API = 'https://nts.khatikgaurav38.workers.dev'; 
+
+        async function fetchWithFallback(queryString, options = {}) {
+            try {
+                const res = await fetch(PRIMARY_API + queryString, options);
+                
+                // Cloudflare WAF block checking (Returns HTML instead of JSON)
+                const contentType = res.headers.get("content-type");
+                if (!res.ok || (contentType && contentType.includes("text/html"))) {
+                    throw new Error("Primary API blocked or failed");
+                }
+                return res;
+            } catch (err) {
+                console.warn("Primary API failed! Switching to Fallback Worker API seamlessly...", err);
+                return await fetch(FALLBACK_API + queryString, options);
+            }
+        }
+        // =========================================
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('id');
+        let folderHistory = [{ id: "0", title: "Course Content" }]; 
+        
+        // Exam State Variables
+        let currentTestId = null;
+        let testQuestions = [];
+        let currentQuestionIndex = 0;
+        let userResponses = {}; 
+        let timerInterval = null;
+        let remainingSeconds = 0;
+        let questionStartTime = null;
+
+        const elCourseBanner = document.getElementById('course-banner');
+        const elCourseThumb = document.getElementById('course-thumb');
+        const elCourseTitle = document.getElementById('course-title');
+        const elCourseDescContent = document.getElementById('course-desc-content');
+        
+        const elBreadcrumbs = document.getElementById('breadcrumbs');
+        const elLoader = document.getElementById('loader');
+        
+        const elContentGrid = document.getElementById('content-grid');
+        const elEmptyState = document.getElementById('empty-state');
+        
+        const viewContent = document.getElementById('view-content');
+        const viewInstructions = document.getElementById('view-instructions');
+        const viewExam = document.getElementById('view-exam');
+        const viewResult = document.getElementById('view-result');
+        
+        const sectionOverview = document.getElementById('section-overview');
+        const sectionContent = document.getElementById('section-content');
+
+        function getCacheBuster() {
+            return `&_t=${Date.now()}`;
+        }
+
+        async function init() {
+            if (!courseId) {
+                alert("Course ID missing!");
+                window.location.href = 'index.html';
+                return;
+            }
+            switchView('content');
+            switchTab('overview');
+            await fetchCourseOverview();
+            await loadFolder("0", "Course Content"); 
+        }
+
+        function switchView(viewName) {
+            viewContent.classList.add('hidden');
+            viewInstructions.classList.add('hidden');
+            viewExam.classList.add('hidden');
+            viewResult.classList.add('hidden');
+
+            if(viewName === 'content') viewContent.classList.remove('hidden');
+            if(viewName === 'instructions') viewInstructions.classList.remove('hidden');
+            if(viewName === 'exam') viewExam.classList.remove('hidden');
+            if(viewName === 'result') viewResult.classList.remove('hidden');
+        }
+
+        function switchTab(tabName) {
+            const inactiveClass = "pb-3 text-sm md:text-base font-semibold flex items-center gap-2 text-textDim hover:text-white border-b-2 border-transparent transition-colors whitespace-nowrap btn-click-effect shrink-0";
+            const activeClass = "pb-3 text-sm md:text-base font-semibold flex items-center gap-2 text-themeBlue border-b-2 border-themeBlue transition-colors whitespace-nowrap btn-click-effect shrink-0";
+            
+            document.getElementById('tab-overview').className = inactiveClass;
+            document.getElementById('tab-content').className = inactiveClass;
+            
+            sectionOverview.classList.add('hidden');
+            sectionContent.classList.add('hidden');
+            
+            elContentGrid.classList.add('hidden');
+            elEmptyState.classList.add('hidden');
+
+            if (tabName === 'overview') {
+                document.getElementById('tab-overview').className = activeClass;
+                sectionOverview.classList.remove('hidden');
+                sectionOverview.classList.add('animate-pop-in');
+            } else if (tabName === 'content') {
+                document.getElementById('tab-content').className = activeClass;
+                sectionContent.classList.remove('hidden');
+                sectionContent.classList.add('flex');
+                
+                if (elContentGrid.innerHTML.trim() !== '') {
+                    elContentGrid.classList.remove('hidden');
+                } else {
+                    elEmptyState.classList.remove('hidden');
+                    elEmptyState.classList.add('flex');
+                }
+            }
+        }
+
+        async function fetchCourseOverview() {
+            try {
+                const res = await fetchWithFallback(`?overview=${courseId}${getCacheBuster()}`);
+                if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
+                
+                const json = await res.json();
+                
+                if (json.success && json.data) {
+                    const overviewTab = json.data.find(d => d.type === 'overview');
+                    const detailsSection = overviewTab?.data?.find(l => l.layout_type === 'details');
+                    const courseDetails = detailsSection?.layout_data?.[0];
+
+                    if (courseDetails) {
+                        elCourseTitle.innerText = courseDetails.title || 'Course Details';
+                        
+                        if(courseDetails.thumbnail) {
+                            elCourseThumb.src = courseDetails.thumbnail;
+                            elCourseThumb.classList.remove('hidden');
+                        }
+                        
+                        if(courseDetails.description) {
+                            elCourseDescContent.innerHTML = courseDetails.description;
+                        } else {
+                            elCourseDescContent.innerHTML = "<p>No description available.</p>";
+                        }
+                        
+                        elCourseBanner.classList.remove('hidden');
+                        elCourseBanner.classList.add('flex');
+                    }
+                }
+            } catch (error) {
+                console.error("Overview Fetch Error:", error);
+                elCourseDescContent.innerHTML = `<p class="text-slate-400">Error loading description.</p>`;
+            }
+        }
+
+        async function loadFolder(folderId, folderTitle) {
+            const existingIndex = folderHistory.findIndex(f => f.id === folderId);
+            if (existingIndex > -1) {
+                folderHistory = folderHistory.slice(0, existingIndex + 1);
+            } else {
+                folderHistory.push({ id: folderId, title: folderTitle });
+            }
+
+            renderBreadcrumbs();
+            showUI('loader');
+
+            try {
+                const res = await fetchWithFallback(`?content=${courseId}&folder=${folderId}${getCacheBuster()}`);
+                if (!res.ok) throw new Error(`HTTP Error ${res.status}`);
+                
+                const json = await res.json();
+
+                if (json.success && json.data && json.data.length > 0) {
+                    renderContentGrid(json.data);
+                    showUI('grid');
+                } else {
+                    showUI('empty');
+                }
+            } catch (error) {
+                console.error("Content Fetch Error:", error);
+                showUI('empty');
+            }
+        }
+
+        function renderBreadcrumbs() {
+            elBreadcrumbs.innerHTML = folderHistory.map((folder, index) => {
+                const isFirst = index === 0;
+                const isLast = index === folderHistory.length - 1;
+                
+                let colorClass = isLast ? 'text-white font-semibold' : 'text-textDim hover:text-white cursor-pointer';
+                const escapedTitle = folder.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+                return `
+                    <span class="flex items-center">
+                        <span class="transition-colors ${colorClass} btn-click-effect" 
+                              onclick="${isLast ? '' : `loadFolder('${folder.id}', '${escapedTitle}')`} ">
+                            ${isFirst ? '<i class="fa-solid fa-home mr-1"></i>' : ''} ${folder.title}
+                        </span>
+                        ${!isLast ? `<i class="fa-solid fa-chevron-right text-[10px] mx-2 text-slate-600"></i>` : ''}
+                    </span>
+                `;
+            }).join('');
+        }
+
+        function renderContentGrid(items) {
+            elContentGrid.innerHTML = items.map((item, index) => {
+                if (item.type === 'folder') return generateFolderHTML(item, index);
+                if (item.type === 'file') {
+                    const fileType = item.data?.file_type;
+                    if (fileType === 2 || item.data?.video_type > 0) return generateVideoHTML(item, index);
+                    return generatePdfHTML(item, index);
+                }
+                if (item.type === 'test') return generateTestHTML(item, index);
+                return '';
+            }).join('');
+        }
+
+        function generateFolderHTML(item, index) {
+            const counts = item.data?.content_counts || {};
+            const fCount = counts.folders?.total || 0;
+            const vCount = (counts.video?.paid || 0) + (counts.video?.free || 0);
+            const pCount = (counts.pdf?.paid || 0) + (counts.pdf?.free || 0);
+            const tCount = (counts.test?.paid || 0) + (counts.test?.free || 0);
+            
+            const escapedTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+            
+            let badges = [];
+            if (fCount > 0) badges.push(`FOLDERS ${fCount}`);
+            if (vCount > 0) badges.push(`VIDEO ${vCount}`);
+            if (pCount > 0) badges.push(`PDF ${pCount}`);
+            if (tCount > 0) badges.push(`TEST ${tCount}`);
+            
+            let countsText = badges.length > 0 ? badges.join(' &nbsp;&nbsp;') : 'EMPTY';
+
+            const thumbnailHTML = item.data?.thumbnail 
+                ? `<img src="${item.data.thumbnail}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">`
+                : `<div class="w-full h-full flex items-center justify-center bg-slate-800">
+                       <i class="fa-solid fa-folder text-4xl text-themeBlue drop-shadow-[0_0_15px_rgba(56,189,248,0.3)]"></i>
+                   </div>`;
+
+            const delay = (index * 30) + 'ms';
+
+            return `
+                <div onclick="loadFolder('${item.entity_id}', '${escapedTitle}')" 
+                     class="glass-card rounded-[20px] cursor-pointer group flex flex-col overflow-hidden h-[220px] animate-pop-in btn-click-effect" style="animation-delay: ${delay}">
+                    <div class="h-[125px] w-full relative overflow-hidden bg-slate-800 border-b border-white/5">
+                        ${thumbnailHTML}
+                    </div>
+                    <div class="p-3 flex-1 flex flex-col justify-center bg-cardBg group-hover:bg-cardHover transition-colors">
+                        <h3 class="text-white font-medium text-sm leading-snug line-clamp-2">${item.title}</h3>
+                        <div class="mt-2 text-[9px] text-textDim font-bold uppercase tracking-wider">
+                            ${countsText}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function formatDuration(seconds) {
+            if (!seconds || isNaN(seconds)) return '00:00';
+            const h = Math.floor(seconds / 3600);
+            const m = Math.floor((seconds % 3600) / 60);
+            const s = Math.floor(seconds % 60);
+            const mStr = m.toString().padStart(2, '0');
+            const sStr = s.toString().padStart(2, '0');
+            return h > 0 ? `${h}:${mStr}:${sStr}` : `${mStr}:${sStr}`;
+        }
+
+        function formatDate(unixTimestamp) {
+            if (!unixTimestamp) return '';
+            const date = new Date(unixTimestamp * 1000);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+        }
+        
+        function showVideoOptions(cId, contId) {
+            const modal = document.getElementById('video-options-modal');
+            const playBtn = document.getElementById('btn-play-video');
+            const dlBtn = document.getElementById('btn-download-video');
+            
+            playBtn.onclick = () => window.location.href = `play.html?courseId=${cId}&contentId=${contId}`;
+            dlBtn.onclick = () => window.location.href = `d.html?courseId=${cId}&contentId=${contId}`;
+            
+            modal.classList.remove('hidden');
+        }
+
+        function closeVideoOptions() {
+            document.getElementById('video-options-modal').classList.add('hidden');
+        }
+
+        function generateVideoHTML(item, index) {
+            const fallbackThumbnail = 'https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/2671188_1_logo.jpg';
+            const thumbnail = item.data?.thumbnail?.trim() ? item.data.thumbnail : fallbackThumbnail;
+            const durationRaw = item.data?.duration || 0;
+            const duration = formatDuration(durationRaw);
+            
+            const createdAtRaw = item.data?.created_at;
+            const formattedDate = formatDate(createdAtRaw);
+
+            const isLive = item.data?.is_live == 1;
+            const videoType = item.data?.video_type;
+            const vdcId = item.data?.vdc_id;
+            
+            const isUpcoming = !isLive && durationRaw == 0 && videoType != 4;
+            const isYouTube = !vdcId && videoType == 1;
+            
+            let tagHTML = '';
+            if (isYouTube) {
+                tagHTML = `<span class="bg-red-500/20 text-red-500 text-[10px] font-bold px-2 py-0.5 rounded border border-red-500/20 flex items-center gap-1"><i class="fa-brands fa-youtube"></i> YOUTUBE</span>`;
+            } else if (isLive) {
+                tagHTML = `<span class="bg-red-500 text-white text-[10px] font-bold px-2 py-0.5 rounded flex items-center gap-1.5 shadow-lg"><div class="w-1.5 h-1.5 bg-white rounded-full animate-pulse"></div> LIVE</span>`;
+            } else if (isUpcoming) {
+                tagHTML = `<span class="bg-indigo-500/20 text-indigo-400 text-[10px] font-bold px-2 py-0.5 rounded border border-indigo-500/20 flex items-center gap-1"><i class="fa-regular fa-clock"></i> UPCOMING</span>`;
+            } else {
+                tagHTML = `<span class="bg-black/60 backdrop-blur-sm text-themeBlue text-[10px] font-bold px-2 py-0.5 rounded border border-white/10 flex items-center gap-1"><div class="w-1.5 h-1.5 rounded-full bg-themeBlue"></div> VIDEO</span>`;
+            }
+
+            const delay = (index * 30) + 'ms';
+
+            return `
+                <div onclick="showVideoOptions('${courseId}', '${item.entity_id}')" 
+                     class="glass-card rounded-[20px] overflow-hidden cursor-pointer group flex flex-col h-[220px] animate-pop-in btn-click-effect" style="animation-delay: ${delay}">
+                    <div class="relative h-[125px] w-full bg-black overflow-hidden border-b border-white/5">
+                        <img src="${thumbnail}" alt="${item.title}" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-300 group-hover:scale-105">
+                        
+                        <div class="absolute top-2 left-2">
+                            ${tagHTML}
+                        </div>
+                        
+                        <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 bg-black/20">
+                            <div class="w-12 h-12 bg-themeBlue/90 backdrop-blur-sm rounded-full flex items-center justify-center pl-1 shadow-[0_0_15px_rgba(56,189,248,0.5)] transform scale-75 group-hover:scale-100 transition-transform duration-300 border border-themeBlue/50">
+                                <i class="fa-solid fa-play text-slate-900 text-lg"></i>
+                            </div>
+                        </div>
+                        
+                        ${!isUpcoming && !isLive && !isYouTube && duration !== '00:00' ? `<div class="absolute bottom-2 right-2 bg-black/70 backdrop-blur-sm border border-white/10 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">${duration}</div>` : ''}
+                    </div>
+                    <div class="p-3 flex-1 flex flex-col justify-center bg-cardBg group-hover:bg-cardHover transition-colors">
+                        <h3 class="text-gray-200 font-medium text-sm leading-snug line-clamp-2">${item.title}</h3>
+                        ${formattedDate ? `<div class="text-[10px] text-slate-500 mt-2 font-medium tracking-wide">${formattedDate}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generatePdfHTML(item, index) {
+            const delay = (index * 30) + 'ms';
+            const createdAtRaw = item.data?.created_at;
+            const formattedDate = formatDate(createdAtRaw);
+            
+            return `
+                <div onclick="window.location.href='play.html?courseId=${courseId}&contentId=${item.entity_id}'" 
+                     class="glass-card rounded-[20px] overflow-hidden cursor-pointer group flex flex-col h-[220px] animate-pop-in btn-click-effect" style="animation-delay: ${delay}">
+                    <div class="relative h-[125px] w-full bg-slate-800 flex items-center justify-center border-b border-white/5">
+                         <i class="fa-regular fa-file-pdf text-4xl text-red-400 group-hover:scale-110 transition-transform"></i>
+                         <div class="absolute top-2 left-2">
+                            <span class="bg-red-500/10 text-red-400 text-[10px] font-medium px-2 py-0.5 rounded border border-red-500/20">PDF</span>
+                         </div>
+                    </div>
+                    <div class="p-3 flex-1 flex flex-col justify-center bg-cardBg group-hover:bg-cardHover transition-colors">
+                        <h3 class="text-gray-200 font-medium text-sm leading-snug line-clamp-2">${item.title}</h3>
+                        ${formattedDate ? `<div class="text-[10px] text-slate-500 mt-2 font-medium tracking-wide">${formattedDate}</div>` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        function generateTestHTML(item, index) {
+            const delay = (index * 30) + 'ms';
+            const escapedTitle = item.title.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+
+            return `
+                <div class="col-span-full glass-card rounded-[20px] overflow-hidden flex flex-col sm:flex-row sm:items-center justify-between p-4 transition-all duration-200 animate-pop-in border border-white/5 hover:border-themeBlue/40" style="animation-delay: ${delay}">
+                    <div class="flex items-start sm:items-center gap-4 mb-4 sm:mb-0">
+                        <div class="w-14 h-14 shrink-0 bg-indigo-500/10 rounded-xl flex items-center justify-center border border-indigo-500/20 group-hover:scale-105 transition-transform">
+                            <i class="fa-solid fa-list-check text-2xl text-indigo-400"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2 mb-1">
+                                <span class="bg-indigo-500/10 text-indigo-400 text-[9px] font-bold px-1.5 py-0.5 rounded border border-indigo-500/20 uppercase tracking-widest">MOCK TEST</span>
+                            </div>
+                            <h3 class="text-white font-medium text-base">${item.title}</h3>
+                        </div>
+                    </div>
+                    
+                    <button onclick="openTestInstructions('${item.entity_id}', '${escapedTitle}')" class="w-full sm:w-auto px-6 py-2.5 rounded-lg font-semibold text-sm bg-white/10 hover:bg-themeBlue hover:text-slate-900 text-white transition-colors btn-click-effect border border-white/5">
+                        Start Assessment
+                    </button>
+                </div>
+            `;
+        }
+
+        function showUI(state) {
+            elLoader.classList.add('hidden');
+            elContentGrid.classList.add('hidden');
+            elEmptyState.classList.add('hidden');
+            elEmptyState.classList.remove('flex');
+
+            if (state === 'loader') {
+                elLoader.classList.remove('hidden');
+                elLoader.classList.add('flex');
+            } else if (state === 'grid') {
+                elContentGrid.classList.remove('hidden');
+                if(document.getElementById('tab-content').className.includes('border-themeBlue')) {
+                   sectionContent.classList.remove('hidden'); 
+                   sectionContent.classList.add('flex');
+                }
+            } else if (state === 'empty') {
+                elEmptyState.classList.remove('hidden');
+                elEmptyState.classList.add('flex');
+                if(document.getElementById('tab-content').className.includes('border-themeBlue')) {
+                   sectionContent.classList.remove('hidden'); 
+                   sectionContent.classList.add('flex');
+                }
+            }
+        }
+
+        // ====================== EXAM SYSTEM (Auth Required) ======================
+
+        async function authenticatedTestFetch(queryString, options = {}) {
+            // Using logic to support old token names dynamically if available
+            const token = localStorage.getItem('studyace_token') || localStorage.getItem('studybee_token');
+            if (!token) {
+                alert("Please login to access assessments.");
+                window.location.href = 'login.html';
+                throw new Error("Missing Auth Token");
+            }
+            
+            options.headers = options.headers || {};
+            options.headers['Authorization'] = `Bearer ${token}`;
+            
+            const response = await fetchWithFallback(queryString, options);
+            const json = await response.json();
+            
+            if (json.responseCode == 401 || json.message === "Invalid or expired token.") {
+                localStorage.removeItem('studyace_token');
+                localStorage.removeItem('studybee_token');
+                localStorage.removeItem('studybee_mobile');
+                alert("Session expired. Please login again.");
+                window.location.href = 'login.html';
+                throw new Error("Session Expired");
+            }
+            
+            return json;
+        }
+
+        async function openTestInstructions(testId, title) {
+            const hasToken = localStorage.getItem('studyace_token') || localStorage.getItem('studybee_token');
+            if (!hasToken) {
+                alert("Please login to attempt this test.");
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentTestId = testId;
+            switchView('instructions');
+            document.getElementById('inst-test-name').innerText = title;
+            document.getElementById('inst-content').innerHTML = '<div class="py-10 text-slate-400">Loading instructions...</div>';
+            
+            try {
+                const json = await authenticatedTestFetch(`?test_instructions=${testId}${getCacheBuster()}`);
+                if(json.success && json.data) {
+                    const data = json.data;
+                    document.getElementById('inst-test-time').innerText = Math.floor((parseInt(data.total_time) || 0) / 60);
+                    document.getElementById('inst-content').innerHTML = data.test_instructions || "<p>No special instructions provided.</p>";
+                } else {
+                    throw new Error(json.message || "Failed to load instructions");
+                }
+            } catch(e) {
+                if (e.message !== "Missing Auth Token" && e.message !== "Session Expired") {
+                    document.getElementById('inst-content').innerHTML = `<p class="text-red-400">Error: ${e.message}</p>`;
+                }
+            }
+        }
+
+        function closeInstructions() {
+            switchView('content');
+            currentTestId = null;
+        }
+
+        async function fetchTestDataAndStart() {
+            document.getElementById('exam-loading-modal').classList.remove('hidden');
+            document.getElementById('exam-loading-modal').classList.add('flex');
+            document.getElementById('exam-loading-text').innerText = "Fetching Questions...";
+
+            try {
+                const json = await authenticatedTestFetch(`?test_data=${currentTestId}${getCacheBuster()}`);
+                
+                if(json.success && json.data) {
+                    const section = json.data.sections?.[0];
+                    if(section && section.questions && section.questions.length > 0) {
+                        testQuestions = section.questions;
+                        remainingSeconds = parseInt(section.time_limits) || parseInt(json.data.total_time) || 3600;
+                        document.getElementById('exam-test-name').innerText = json.data.test_name;
+                        
+                        startExam();
+                    } else {
+                        alert("No questions found in this test.");
+                        document.getElementById('exam-loading-modal').classList.add('hidden');
+                        document.getElementById('exam-loading-modal').classList.remove('flex');
+                    }
+                } else {
+                    throw new Error(json.message || "Failed to load test data");
+                }
+            } catch(e) {
+                if (e.message !== "Missing Auth Token" && e.message !== "Session Expired") {
+                    alert("Failed to load test data: " + e.message);
+                }
+                document.getElementById('exam-loading-modal').classList.add('hidden');
+                document.getElementById('exam-loading-modal').classList.remove('flex');
+            }
+        }
+
+        function startExam() {
+            document.getElementById('exam-loading-modal').classList.add('hidden');
+            document.getElementById('exam-loading-modal').classList.remove('flex');
+            switchView('exam');
+            
+            userResponses = {};
+            testQuestions.forEach(q => {
+                userResponses[q.question_group_id] = { selected: [], time_spent: 0, status: '1' }; 
+            });
+
+            currentQuestionIndex = 0;
+            renderQuestion();
+            startTimer();
+        }
+
+        function renderQuestion() {
+            const q = testQuestions[currentQuestionIndex];
+            const qId = q.question_group_id;
+            const langData = q.languages.english;
+            
+            questionStartTime = Date.now();
+
+            let optionsHTML = '';
+            const opts = [
+                { key: 'option_a', label: langData.option_a },
+                { key: 'option_b', label: langData.option_b },
+                { key: 'option_c', label: langData.option_c },
+                { key: 'option_d', label: langData.option_d },
+                { key: 'option_e', label: langData.option_e }
+            ].filter(o => o.label && o.label.trim() !== '');
+
+            const currentSelected = userResponses[qId].selected[0] || null;
+
+            opts.forEach((opt) => {
+                const isChecked = currentSelected === opt.key ? 'checked' : '';
+                optionsHTML += `
+                    <div class="mb-3">
+                        <input type="radio" name="q_${qId}" id="opt_${qId}_${opt.key}" value="${opt.key}" class="custom-radio" ${isChecked}>
+                        <label for="opt_${qId}_${opt.key}" class="question-html">
+                            <div class="radio-circle"></div>
+                            <div class="flex-1">${opt.label}</div>
+                        </label>
+                    </div>
+                `;
+            });
+
+            const fullHTML = `
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-lg font-semibold text-white">Question ${currentQuestionIndex + 1} of ${testQuestions.length}</h3>
+                    <div class="text-xs font-medium text-slate-400">Marks: <span class="text-green-400">+${q.mark_per_question}</span> / <span class="text-red-400">-${q.negative_marks}</span></div>
+                </div>
+                <div class="text-base mb-8 text-gray-200 question-html">
+                    ${langData.question_text}
+                </div>
+                <div class="space-y-2">
+                    ${optionsHTML}
+                </div>
+            `;
+
+            document.getElementById('question-render-area').innerHTML = fullHTML;
+            document.getElementById('question-render-area').scrollTop = 0;
+
+            document.getElementById('btn-prev').disabled = (currentQuestionIndex === 0);
+            
+            const btnNext = document.getElementById('btn-next');
+            if (currentQuestionIndex === testQuestions.length - 1) {
+                btnNext.innerHTML = `Submit`;
+                btnNext.classList.remove('bg-themeBlue', 'text-slate-900', 'hover:bg-themeBlueHover');
+                btnNext.classList.add('bg-white', 'text-slate-900', 'hover:bg-gray-200');
+            } else {
+                btnNext.innerHTML = `Save & Next`;
+                btnNext.classList.add('bg-themeBlue', 'text-slate-900', 'hover:bg-themeBlueHover');
+                btnNext.classList.remove('bg-white', 'text-slate-900', 'hover:bg-gray-200');
+            }
+        }
+
+        function recordTimeSpent() {
+            if(!questionStartTime) return;
+            const qId = testQuestions[currentQuestionIndex].question_group_id;
+            const elapsed = Math.floor((Date.now() - questionStartTime) / 1000);
+            userResponses[qId].time_spent += elapsed;
+            questionStartTime = Date.now();
+        }
+
+        function clearResponse() {
+            const qId = testQuestions[currentQuestionIndex].question_group_id;
+            userResponses[qId].selected = [];
+            userResponses[qId].status = '1'; 
+            const radios = document.querySelectorAll(`input[name="q_${qId}"]`);
+            radios.forEach(r => r.checked = false);
+        }
+
+        function saveAndNext() {
+            recordTimeSpent();
+            const qId = testQuestions[currentQuestionIndex].question_group_id;
+            const selectedOpt = document.querySelector(`input[name="q_${qId}"]:checked`);
+            
+            if(selectedOpt) {
+                userResponses[qId].selected = [selectedOpt.value];
+                userResponses[qId].status = '2'; 
+            }
+
+            if (currentQuestionIndex < testQuestions.length - 1) {
+                currentQuestionIndex++;
+                renderQuestion();
+            } else {
+                showSubmitModal();
+            }
+        }
+
+        function prevQuestion() {
+            if(currentQuestionIndex > 0) {
+                recordTimeSpent();
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                remainingSeconds--;
+                updateTimerDisplay();
+                if(remainingSeconds <= 0) {
+                    clearInterval(timerInterval);
+                    alert("Time's up! Submitting automatically.");
+                    submitTestToApi();
+                }
+            }, 1000);
+        }
+
+        function updateTimerDisplay() {
+            const h = Math.floor(remainingSeconds / 3600);
+            const m = Math.floor((remainingSeconds % 3600) / 60);
+            const s = remainingSeconds % 60;
+            document.getElementById('exam-timer').innerText = 
+                `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        }
+
+        function showSubmitModal() {
+            recordTimeSpent();
+            document.getElementById('submit-modal').classList.remove('hidden');
+            document.getElementById('submit-modal').classList.add('flex');
+        }
+
+        function closeSubmitModal() {
+            document.getElementById('submit-modal').classList.add('hidden');
+            document.getElementById('submit-modal').classList.remove('flex');
+            questionStartTime = Date.now(); 
+        }
+
+        async function submitTestToApi() {
+            clearInterval(timerInterval);
+            closeSubmitModal();
+            document.getElementById('exam-loading-modal').classList.remove('hidden');
+            document.getElementById('exam-loading-modal').classList.add('flex');
+            document.getElementById('exam-loading-text').innerText = "Submitting...";
+
+            const answersArray = testQuestions.map(q => {
+                const res = userResponses[q.question_group_id];
+                return {
+                    question_id: q.question_group_id,
+                    selected_answers: res.selected,
+                    time_spent: res.time_spent.toString(),
+                    status: res.status
+                };
+            });
+
+            const payload = {
+                test_id: currentTestId,
+                attempt_mode: "live",
+                course_id: courseId,
+                answers: answersArray
+            };
+
+            try {
+                const json = await authenticatedTestFetch(`?submit=true`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                
+                if(json.success || json.responseCode == 200) {
+                    await fetchResults();
+                } else {
+                    throw new Error(json.message || "Submission failed");
+                }
+            } catch(e) {
+                if (e.message !== "Missing Auth Token" && e.message !== "Session Expired") {
+                    alert("Error: " + e.message);
+                }
+                document.getElementById('exam-loading-modal').classList.add('hidden');
+                document.getElementById('exam-loading-modal').classList.remove('flex');
+            }
+        }
+
+        async function fetchResults() {
+            document.getElementById('exam-loading-text').innerText = "Preparing Results...";
+            try {
+                const json = await authenticatedTestFetch(`?test_result=${currentTestId}${getCacheBuster()}`);
+                
+                document.getElementById('exam-loading-modal').classList.add('hidden');
+                document.getElementById('exam-loading-modal').classList.remove('flex');
+                switchView('result');
+
+                if(json.success && json.data) {
+                    renderResultDashboard(json.data);
+                } else {
+                    throw new Error(json.message || "Result data unavailable");
+                }
+            } catch(e) {
+                document.getElementById('exam-loading-modal').classList.add('hidden');
+                document.getElementById('exam-loading-modal').classList.remove('flex');
+                
+                if (e.message !== "Missing Auth Token" && e.message !== "Session Expired") {
+                    document.getElementById('view-result').innerHTML = `<div class="text-center py-10 text-red-400">Error loading results: ${e.message}</div>`;
+                }
+                switchView('result');
+            }
+        }
+
+        function renderResultDashboard(data) {
+            const overview = data.overview || {};
+            const perf = data.performance_summary || {};
+            
+            const html = `
+                <div class="bg-cardBg border border-white/10 rounded-2xl p-6 md:p-10 max-w-3xl mx-auto shadow-xl">
+                    
+                    <div class="text-center mb-10">
+                        <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4 border border-white/10 shadow-inner">
+                            <i class="fa-solid fa-flag-checkered text-2xl text-white"></i>
+                        </div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-white mb-2">Assessment Complete</h2>
+                        <p class="text-slate-400 text-sm">${overview.test_name}</p>
+                    </div>
+
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+                        <div class="bg-slate-800 p-4 rounded-xl border border-white/5 text-center">
+                            <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Rank</div>
+                            <div class="text-xl font-bold text-white">${perf.your_rank || '-'} <span class="text-xs text-slate-600 font-normal">/ ${perf.total_students || '-'}</span></div>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-white/5 text-center">
+                            <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Score</div>
+                            <div class="text-xl font-bold text-white">${perf.score || '0'} <span class="text-xs text-slate-600 font-normal">/ ${perf.max_marks || '0'}</span></div>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-white/5 text-center">
+                            <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Accuracy</div>
+                            <div class="text-xl font-bold text-white">${perf.percentage || '0'}%</div>
+                        </div>
+                        <div class="bg-slate-800 p-4 rounded-xl border border-white/5 text-center">
+                            <div class="text-xs text-slate-500 font-medium uppercase tracking-wider mb-1">Percentile</div>
+                            <div class="text-xl font-bold text-white">${perf.percentile || '0'}</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-800 rounded-xl p-5 border border-white/5">
+                        <h3 class="text-sm font-semibold text-white mb-4 border-b border-white/5 pb-3">Performance Breakdown</h3>
+                        <div class="flex gap-4">
+                            <div class="flex-1 bg-themeBg border border-white/5 rounded-lg p-3 text-center shadow-inner">
+                                <div class="text-lg font-bold text-green-400">${perf.correct || 0}</div>
+                                <div class="text-[10px] uppercase font-semibold text-slate-500">Correct</div>
+                            </div>
+                            <div class="flex-1 bg-themeBg border border-white/5 rounded-lg p-3 text-center shadow-inner">
+                                <div class="text-lg font-bold text-red-400">${perf.wrong || 0}</div>
+                                <div class="text-[10px] uppercase font-semibold text-slate-500">Incorrect</div>
+                            </div>
+                            <div class="flex-1 bg-themeBg border border-white/5 rounded-lg p-3 text-center shadow-inner">
+                                <div class="text-lg font-bold text-slate-400">${perf.unattempted || 0}</div>
+                                <div class="text-[10px] uppercase font-semibold text-slate-500">Skipped</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 text-center">
+                        <button onclick="closeInstructions()" class="px-6 py-2.5 rounded-lg font-medium text-sm bg-white/10 hover:bg-white/20 transition-colors text-white btn-click-effect border border-white/5">
+                            Return to Course
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.getElementById('view-result').innerHTML = html;
+        }
+
+        // Boot
+        init();
+    </script>
+</body>
+</html>
