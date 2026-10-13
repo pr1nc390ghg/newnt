@@ -1,30 +1,30 @@
-﻿<!DOCTYPE html>
-<html lang="en" class="dark">
-<head><script src="e2e.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="e2e.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Study Ace ðŸŽ“ | Premium Batches</title>
+    <title>Next Toppers - Live Classes & Courses</title>
     
-    <!-- Updated Logo -->
-    <link rel="icon" href="https://i.ibb.co/sprtw68N/IMG-5850.png" type="image/png">  
+    <link rel="icon" href="https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/2345517_1_nexttoppers_header_logo.jpg" type="image/jpeg">  
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Syne:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        themeBg: '#0f172a', /* Premium Slate Dark Background */
-                        cardBg: '#1e293b',  /* Lighter Slate for Cards */
-                        themeBlue: '#38bdf8', /* Asmani / Sky Blue */
-                        themeBlueHover: '#0ea5e9',
-                        themeGreen: '#10B981',
+                        ntPrimary: '#20c997',
+                        ntTeal: '#2dd4bf',
+                        ntTealDark: '#0f766e',
+                        ntDark: '#2b2f33',
+                        ntNav: '#32363b',
+                        ntCardBg: '#ffffff',
                     },
                     fontFamily: {
-                        sans: ['Inter', 'system-ui', 'sans-serif'],
-                        syne: ['Syne', 'sans-serif'],
+                        sans: ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
                     }
                 }
             }
@@ -32,175 +32,755 @@
     </script>
     <style>
         body { 
-            background-color: #0f172a; 
-            color: #f8fafc; 
+            background-color: #ffffff; 
+            color: #212529; 
             scroll-behavior: smooth; 
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
         }
         
         .btn-click-effect { transition: transform 0.1s ease-in-out; }
-        .btn-click-effect:active { transform: scale(0.95); }
-        
-        /* Clean, professional card styling with Sky Blue hover */
-        .premium-card {
-            background-color: #1e293b;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            transition: all 0.3s ease-in-out;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-        .premium-card:hover {
-            transform: translateY(-5px);
-            border-color: rgba(56, 189, 248, 0.4);
-            box-shadow: 0 12px 40px -10px rgba(56, 189, 248, 0.15);
-        }
-        
-        .fade-in-pop { 
-            animation: fadeInPop 0.5s ease-out forwards; 
-            opacity: 0;
-        }
-        @keyframes fadeInPop { 
-            0% { opacity: 0; transform: translateY(20px); } 
-            100% { opacity: 1; transform: translateY(0); } 
-        }
-        
-        @keyframes slideDown { from { transform: translate(-50%, -100%); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
-        .toast-enter { animation: slideDown 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+        .btn-click-effect:active { transform: scale(0.96); }
 
         .hide-scroll::-webkit-scrollbar { display: none; }
         .hide-scroll { -ms-overflow-style: none; scrollbar-width: none; }
-        
-        .nav-glass {
-            background: rgba(15, 23, 42, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+        .slider-track {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .modal-glass {
-            background: rgba(30, 41, 59, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        .category-scroll-container, .trending-scroll-container, .free-scroll-container {
+            scroll-behavior: smooth;
         }
+
+        .course-card {
+            transition: all 0.25s ease-in-out;
+        }
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 14px 28px -6px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        @keyframes toastIn {
+            from { transform: translate(-50%, -100%); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+        .toast-show { animation: toastIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="min-h-screen relative flex flex-col font-sans pb-12">
+<body class="min-h-screen flex flex-col font-sans bg-white text-gray-800">
     
-    <div id="toast" class="fixed top-6 left-1/2 -translate-x-1/2 z-[999] hidden items-center gap-3 px-6 py-3 rounded-full font-bold text-sm shadow-[0_10px_30px_rgba(0,0,0,0.5)] border transition-all duration-300">
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed top-5 left-1/2 -translate-x-1/2 z-[999] hidden items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-sm shadow-xl border transition-all duration-300">
         <i data-lucide="info" id="toast-icon" class="w-4 h-4"></i>
         <span id="toast-msg">Notification</span>
     </div>
 
-    <!-- Navbar -->
-    <nav class="w-full z-40 nav-glass h-[70px] sticky top-0">
-        <div class="max-w-[90rem] mx-auto px-4 sm:px-6 h-full flex items-center justify-between">
-            <div class="flex items-center gap-3 cursor-pointer btn-click-effect" onclick="window.location.reload()">
-                <div class="w-9 h-9 bg-white border border-white/20 rounded-lg flex items-center justify-center relative z-10 overflow-hidden shadow-lg shadow-themeBlue/20">
-                    <!-- Updated Logo Here -->
-                    <img src="https://i.ibb.co/sprtw68N/IMG-5850.png" alt="Study Ace Logo" class="w-full h-full object-contain p-0.5">
+    <!-- Top Header / Navbar (Matching Screenshot 1) -->
+    <header class="w-full bg-[#2f3337] sticky top-0 z-50 shadow-md">
+        <div class="max-w-[88rem] mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-3 sm:gap-6">
+            
+            <!-- Left Logo -->
+            <div class="flex items-center gap-3 shrink-0 cursor-pointer btn-click-effect" onclick="window.location.reload()">
+                <div class="h-10 sm:h-11 rounded-xl p-0.5 border border-white/20 bg-black/40 flex items-center justify-center overflow-hidden shadow-inner">
+                    <img src="https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/2345517_1_nexttoppers_header_logo.jpg" 
+                         alt="Next Toppers Logo" 
+                         class="h-full w-auto object-contain rounded-lg">
                 </div>
-                <!-- Updated Brand Name -->
-                <h1 class="text-xl font-black tracking-wider text-white font-syne">STUDY<span class="text-themeBlue">ACE</span></h1>
             </div>
-            
-            <div class="hidden md:flex items-center gap-6">
-                <button onclick="switchTab('new')" class="text-white hover:text-themeBlue font-bold text-sm transition-colors flex items-center gap-2 btn-click-effect">
-                    <i data-lucide="layout-grid" class="w-4 h-4"></i> Batches
-                </button>
-                <button onclick="switchTab('wishlist')" class="text-slate-400 hover:text-white font-bold text-sm transition-colors flex items-center gap-2">
-                    <i data-lucide="bookmark" class="w-4 h-4"></i> My Enrollments
-                </button>
-            </div>
-            
-            <div class="md:hidden flex items-center gap-3">
-                <button onclick="switchTab('wishlist')" class="text-slate-300 p-2 border border-white/10 rounded-lg hover:text-themeBlue hover:border-themeBlue transition-colors btn-click-effect relative bg-white/5">
-                    <i data-lucide="bookmark" class="w-5 h-5"></i>
-                    <span id="mobile-wishlist-indicator" class="absolute -top-1 -right-1 w-2.5 h-2.5 bg-themeBlue rounded-full hidden shadow-[0_0_8px_rgba(56,189,248,0.8)]"></span>
-                </button>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Main Content -->
-    <main class="flex-1 w-full max-w-[90rem] mx-auto px-4 sm:px-6 pt-8 relative z-10">
-        
-        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8 fade-in-pop" style="animation-delay: 50ms;">
-            
-            <!-- Tabs Navigation -->
-            <div class="flex items-center gap-1 sm:gap-2 overflow-x-auto hide-scroll w-full md:w-auto p-1 bg-slate-800 rounded-xl border border-white/10 shadow-inner">
-                
-                <button id="tab-new" onclick="switchTab('new')" class="tab-btn active shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all bg-themeBlue/20 text-themeBlue border border-themeBlue/30 flex items-center gap-1.5 shadow-sm">
-                    <i data-lucide="sparkles" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i> 
-                    Latest <span class="hidden sm:inline">Batches</span>
-                </button>
-                
-                <button id="tab-wishlist" onclick="switchTab('wishlist')" class="tab-btn shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all bg-transparent text-slate-400 hover:text-slate-200 border border-transparent flex items-center gap-1.5">
-                    <i data-lucide="bookmark" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i> 
-                    <span class="hidden sm:inline">My </span>Enrolled
-                    <span id="wishlist-count" class="bg-themeBlue text-slate-900 text-[9px] sm:text-[10px] font-black px-1.5 py-0.5 rounded hidden">0</span>
-                </button>
-                
-                <div class="w-px h-4 bg-white/10 mx-1 shrink-0"></div>
-                
-                <button onclick="window.location.href='https://old-nt.studyace.in'" class="shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 rounded-lg text-[11px] sm:text-sm font-bold transition-all bg-transparent text-slate-400 hover:text-themeBlue border border-transparent flex items-center gap-1.5 btn-click-effect">
-                    <i data-lucide="history" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i> 
-                    Old <span class="hidden sm:inline">Batches</span>
-                    <i data-lucide="external-link" class="w-3 h-3 opacity-60"></i>
-                </button>
-
-            </div>
-            
-            <!-- Search Box -->
-            <div class="relative w-full md:w-[350px]">
-                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                    <i data-lucide="search" class="w-4 h-4 text-slate-400"></i>
+            <!-- Search Option (Centered in Header as in Screenshot 1) -->
+            <div class="flex-1 max-w-xl mx-2 sm:mx-6">
+                <div class="relative w-full">
+                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                        <i data-lucide="search" class="w-4 h-4 text-gray-400"></i>
+                    </div>
+                    <input type="text" id="searchInput" 
+                           placeholder="What are you looking for..." 
+                           class="w-full bg-white text-gray-800 text-xs sm:text-sm rounded-lg pl-9 pr-9 py-2 sm:py-2.5 shadow-sm border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#20c997] focus:border-transparent placeholder:text-gray-400 font-medium transition-all">
+                    <button id="clearSearchBtn" onclick="clearSearch()" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 hidden transition-colors">
+                        <i data-lucide="x" class="w-4 h-4"></i>
+                    </button>
                 </div>
-                <input type="text" id="searchInput" placeholder="Search batches..." 
-                    class="w-full bg-slate-800 border border-white/10 text-white text-sm rounded-xl block pl-10 pr-10 py-2.5 transition-all placeholder:text-slate-500 focus:outline-none focus:border-themeBlue/50 focus:ring-1 focus:ring-themeBlue/50">
-                <button id="clearSearchBtn" onclick="clearSearch()" class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-white hidden transition-colors">
-                    <i data-lucide="x" class="w-4 h-4"></i>
+            </div>
+
+            <!-- Right Links & Login / Register -->
+            <div class="flex items-center gap-4 sm:gap-6 shrink-0">
+                <div class="hidden md:flex items-center gap-6 text-sm font-medium text-gray-200">
+                    <a href="contact.html" class="hover:text-[#20c997] transition-colors">Blogs</a>
+                    
+                    <div class="relative group cursor-pointer flex items-center gap-1 hover:text-[#20c997] transition-colors py-2">
+                        <span>Our Products</span>
+                        <i data-lucide="chevron-down" class="w-3.5 h-3.5 text-gray-300 group-hover:rotate-180 transition-transform duration-200"></i>
+                        
+                        <!-- Dropdown Menu -->
+                        <div class="absolute right-0 top-full pt-2 hidden group-hover:block w-52 z-50">
+                            <div class="bg-white rounded-xl shadow-xl border border-gray-100 py-2 text-gray-800 text-xs font-semibold">
+                                <a href="#our-products-section" onclick="filterByClass('9th')" class="flex items-center px-4 py-2 hover:bg-gray-50 hover:text-[#20c997]">Class 9th (Aarambh)</a>
+                                <a href="#our-products-section" onclick="filterByClass('10th')" class="flex items-center px-4 py-2 hover:bg-gray-50 hover:text-[#20c997]">Class 10th (Aarambh)</a>
+                                <a href="#our-products-section" onclick="filterByClass('7th')" class="flex items-center px-4 py-2 hover:bg-gray-50 hover:text-[#20c997]">Class 7th & 8th (Nirmaan)</a>
+                                <a href="#our-products-section" onclick="filterByClass('11th')" class="flex items-center px-4 py-2 hover:bg-gray-50 hover:text-[#20c997]">Class 11th (Prarambh)</a>
+                                <a href="#our-products-section" onclick="filterByClass('12th')" class="flex items-center px-4 py-2 hover:bg-gray-50 hover:text-[#20c997]">Class 12th (Prarambh)</a>
+                                <a href="#our-products-section" onclick="filterByClass('cuet')" class="flex items-center px-4 py-2 hover:bg-gray-50 hover:text-[#20c997]">CUET & Olympiad</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button onclick="switchTab('wishlist')" class="flex items-center gap-1.5 hover:text-[#20c997] transition-colors">
+                        <i data-lucide="bookmark" class="w-4 h-4"></i>
+                        <span>Enrolled</span>
+                        <span id="nav-wishlist-count" class="bg-[#20c997] text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full hidden">0</span>
+                    </button>
+                </div>
+
+                <a href="login.html" class="bg-[#20c997] hover:bg-[#1bb888] text-white text-xs sm:text-sm font-bold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-lg transition shadow-sm flex items-center gap-1.5 btn-click-effect whitespace-nowrap">
+                    <span>Login / Register</span>
+                </a>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 w-full bg-white pb-20">
+        
+        <!-- 1. SLIDING BANNER SECTION ("sild hota huwa banner") -->
+        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-5 sm:pt-7">
+            <div class="relative overflow-hidden rounded-2xl shadow-md border border-gray-100 group bg-gray-900" id="heroBannerCarousel">
+                
+                <!-- Slides Track -->
+                <div id="bannerTrack" class="slider-track w-full">
+                    
+                    <!-- Slide 1: Aarambh 2.0 PLUS 9th -->
+                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-amber-700 via-orange-600 to-amber-900 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 179)">
+                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1219057_125_9th%20aarambh%202.0%20plus%20banner%20app.jpg" 
+                             alt="Class 9th Aarambh 2.0 Plus Banner" 
+                             class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Slide 2: Aarambh 2.0 10th -->
+                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-blue-900 via-indigo-800 to-purple-900 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 176)">
+                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/356423_125_10th%20aarambh%202.0%20banner%20app%202.jpg" 
+                             alt="Class 10th Aarambh 2.0 Banner" 
+                             class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Slide 3: Nirmaan 2.0 Class 8th -->
+                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-emerald-900 via-teal-800 to-cyan-900 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 193)">
+                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6292174_125_Nirmaan%202.0%20Batch%20Class%208th%20App%20Banners09.png" 
+                             alt="Nirmaan 2.0 Class 8th Banner" 
+                             class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Slide 4: Science Class 11th Prarambh -->
+                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-blue-950 via-cyan-900 to-teal-950 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 107)">
+                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/7450443_125_Science%20Prarambh%202.0%20Batch%20Class%2011th%20App%20Banners.jpg" 
+                             alt="Class 11th Prarambh 2.0 Banner" 
+                             class="w-full h-full object-cover">
+                    </div>
+
+                    <!-- Slide 5: Science Class 12th Prarambh -->
+                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-indigo-950 via-slate-900 to-blue-950 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 103)">
+                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1153510_125_Science%20Prarambh%202.0%20Batch%20Class%2012th%20App%20Banners.jpg" 
+                             alt="Class 12th Prarambh 2.0 Banner" 
+                             class="w-full h-full object-cover">
+                    </div>
+
+                </div>
+
+                <!-- Left & Right Arrow Controls on Carousel -->
+                <button onclick="prevBannerSlide()" aria-label="Previous Slide" 
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10 btn-click-effect">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <button onclick="nextBannerSlide()" aria-label="Next Slide" 
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10 btn-click-effect">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
                 </button>
             </div>
-        </div>
-        
-        <div id="loadingIndicator" class="flex flex-col items-center justify-center py-20">
-            <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-themeBlue mb-3"></i>
-            <p class="text-slate-400 font-medium text-sm">Loading batches...</p>
-        </div>
-        
-        <div id="batchGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 hidden">
-        </div>
-        
-        <div id="loadMoreContainer" class="w-full flex justify-center mt-10 mb-6 hidden fade-in-pop">
-            <button id="loadMoreBtn" onclick="loadMore()" class="px-8 py-2.5 bg-slate-800 border border-white/10 hover:border-themeBlue/40 rounded-lg text-white font-semibold text-sm transition-all btn-click-effect flex items-center gap-2 hover:shadow-[0_0_15px_rgba(56,189,248,0.15)]">
-                Load More <i data-lucide="chevron-down" class="w-4 h-4"></i>
-            </button>
-        </div>
-        
-        <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center fade-in-pop">
-            <div class="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4 border border-white/10">
-                <i data-lucide="folder-open" class="w-8 h-8 text-slate-500"></i>
+
+            <!-- Dots Indicators Below Banner (Exact style as in Screenshot 1) -->
+            <div class="flex items-center justify-center gap-2 mt-3.5" id="bannerDots">
+                <button onclick="goToBannerSlide(0)" class="banner-dot h-2 w-6 rounded-full bg-[#20c997] transition-all duration-300"></button>
+                <button onclick="goToBannerSlide(1)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
+                <button onclick="goToBannerSlide(2)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
+                <button onclick="goToBannerSlide(3)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
+                <button onclick="goToBannerSlide(4)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
             </div>
-            <h3 class="text-xl font-bold text-white mb-1">No Batches Found</h3>
-            <p class="text-slate-400 text-sm">Try adjusting your search or enrolling in new batches.</p>
-        </div>
+        </section>
+
+
+        <!-- 2. TRENDING COURSES SECTION (Matching Screenshot 1) -->
+        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-10 sm:pt-14">
+            <div class="text-center mb-6">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 flex items-center justify-center gap-2">
+                    <span>🔥</span> Trending Courses
+                </h2>
+            </div>
+
+            <div class="relative px-2 sm:px-8">
+                <!-- Circular Left Arrow Button (Matching Teal Round Arrow in Screenshot 1) -->
+                <button onclick="scrollTrending(-1)" 
+                        class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Trending Carousel Track -->
+                <div id="trendingTrack" class="trending-scroll-container flex items-center gap-4 sm:gap-6 overflow-x-auto hide-scroll py-3 px-1">
+                    
+                    <!-- Card 1: Nirmaan 2.0 Batch Class 8th -->
+                    <div onclick="handleStudyClick(event, 193)" class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6292174_125_Nirmaan%202.0%20Batch%20Class%208th%20App%20Banners09.png" 
+                                 alt="Nirmaan 2.0 Batch Class 8th" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Card 2: IOQM + NSEJS + SEHSS (Crash Course) -->
+                    <div onclick="handleStudyClick(event, 192)" class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/7718044_125_Olympaid%20Combo%20App%20Banners09%20%281%29.png" 
+                                 alt="IOQM + NSEJS + SEHSS" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Card 3: NSEJS + SEHSS CRASH COURSE -->
+                    <div onclick="handleStudyClick(event, 191)" class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/7402474_125_Olympaid%20NSEJS%2BSEHSS%20App%20Banners09.png" 
+                                 alt="NSEJS + SEHSS" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Card 4: AARAMBH 2.0 PLUS 9th BATCH -->
+                    <div onclick="handleStudyClick(event, 179)" class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1219057_125_9th%20aarambh%202.0%20plus%20banner%20app.jpg" 
+                                 alt="AARAMBH 2.0 PLUS 9th" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Card 5: AARAMBH 2.0 10th BATCH -->
+                    <div onclick="handleStudyClick(event, 176)" class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/356423_125_10th%20aarambh%202.0%20banner%20app%202.jpg" 
+                                 alt="AARAMBH 2.0 10th" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                    <!-- Card 6: Science 11th - PRARAMBH 2.0 -->
+                    <div onclick="handleStudyClick(event, 107)" class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-sm border border-gray-100 cursor-pointer">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/7450443_125_Science%20Prarambh%202.0%20Batch%20Class%2011th%20App%20Banners.jpg" 
+                                 alt="Science 11th PRARAMBH" class="w-full h-full object-cover">
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Circular Right Arrow Button (Matching Screenshot 1) -->
+                <button onclick="scrollTrending(1)" 
+                        class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- 3. OUR PRODUCT SECTION (Matching Screenshot 1 & 2) -->
+        <section id="our-products-section" class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-12 sm:pt-16">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900">Our Product</h2>
+            </div>
+
+            <div class="relative px-2 sm:px-8">
+                <!-- Circular Left Arrow Button (Matching Teal Round Arrow) -->
+                <button onclick="scrollProducts(-1)" 
+                        class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Categories Scroll Container -->
+                <div id="productsTrack" class="category-scroll-container flex items-center gap-4 sm:gap-6 overflow-x-auto hide-scroll py-3 px-1">
+                    
+                    <!-- Category 1: AARAMBH 9th -->
+                    <div onclick="filterByClass('9th')" class="course-card shrink-0 w-[200px] sm:w-[220px] rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 cursor-pointer flex flex-col group">
+                        <div class="aspect-square w-full overflow-hidden bg-emerald-950 relative">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/4330317_125_9th%20aarambh%202.0%20banner%20app%202.jpg" 
+                                 alt="AARAMBH 9th" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-3 bg-white flex items-center justify-between">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800">AARAMBH 9th</span>
+                            <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#20c997] group-hover:text-white transition-colors">
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 2: Class 7th | 8th FOUNDATION -->
+                    <div onclick="filterByClass('7th')" class="course-card shrink-0 w-[200px] sm:w-[220px] rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 cursor-pointer flex flex-col group">
+                        <div class="aspect-square w-full overflow-hidden bg-teal-950 relative">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1228199_125_Class%207th%20Nirmann%20Prashant%20Sir%20Banners09-01.png" 
+                                 alt="Class 7th | 8th Foundation" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-3 bg-white flex items-center justify-between">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800">Class 7th | 8th</span>
+                            <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#20c997] group-hover:text-white transition-colors">
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 3: AARAMBH 10th -->
+                    <div onclick="filterByClass('10th')" class="course-card shrink-0 w-[200px] sm:w-[220px] rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 cursor-pointer flex flex-col group">
+                        <div class="aspect-square w-full overflow-hidden bg-emerald-950 relative">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/356423_125_10th%20aarambh%202.0%20banner%20app%202.jpg" 
+                                 alt="AARAMBH 10th" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-3 bg-white flex items-center justify-between">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800">AARAMBH 10th</span>
+                            <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#20c997] group-hover:text-white transition-colors">
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 4: Class 11th -->
+                    <div onclick="filterByClass('11th')" class="course-card shrink-0 w-[200px] sm:w-[220px] rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 cursor-pointer flex flex-col group">
+                        <div class="aspect-square w-full overflow-hidden bg-green-950 relative">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/7450443_125_Science%20Prarambh%202.0%20Batch%20Class%2011th%20App%20Banners.jpg" 
+                                 alt="Class 11th" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-3 bg-white flex items-center justify-between">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800">Class 11th</span>
+                            <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#20c997] group-hover:text-white transition-colors">
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 5: Class 12th -->
+                    <div onclick="filterByClass('12th')" class="course-card shrink-0 w-[200px] sm:w-[220px] rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 cursor-pointer flex flex-col group">
+                        <div class="aspect-square w-full overflow-hidden bg-emerald-950 relative">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1153510_125_Science%20Prarambh%202.0%20Batch%20Class%2012th%20App%20Banners.jpg" 
+                                 alt="Class 12th" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-3 bg-white flex items-center justify-between">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800">Class 12th</span>
+                            <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#20c997] group-hover:text-white transition-colors">
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Category 6: CUET & Olympiads -->
+                    <div onclick="filterByClass('cuet')" class="course-card shrink-0 w-[200px] sm:w-[220px] rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 cursor-pointer flex flex-col group">
+                        <div class="aspect-square w-full overflow-hidden bg-teal-950 relative">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/346473_125_Science%20CUET%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" 
+                                 alt="CUET & Olympiads" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-3 bg-white flex items-center justify-between">
+                            <span class="text-xs sm:text-sm font-bold text-gray-800">CUET & Olympiad</span>
+                            <div class="w-5 h-5 rounded-full bg-gray-100 flex items-center justify-center text-gray-600 group-hover:bg-[#20c997] group-hover:text-white transition-colors">
+                                <i data-lucide="chevron-right" class="w-3.5 h-3.5"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Circular Right Arrow Button (Matching Screenshot 2) -->
+                <button onclick="scrollProducts(1)" 
+                        class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- 4. FREE COURSES SECTION (Matching Screenshot 2) -->
+        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-12 sm:pt-16">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 inline-block relative pb-2.5">
+                    Free Courses
+                    <span class="absolute bottom-0 left-1/2 -translate-x-1/2 w-28 h-1 bg-gray-900 rounded-full"></span>
+                </h2>
+            </div>
+
+            <div class="relative px-2 sm:px-8">
+                <!-- Circular Left Arrow Button (Matching Screenshot 2) -->
+                <button onclick="scrollFree(-1)" 
+                        class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+
+                <!-- Free Courses Scroll Container -->
+                <div id="freeTrack" class="free-scroll-container flex items-stretch gap-4 sm:gap-6 overflow-x-auto hide-scroll py-3 px-1">
+                    
+                    <!-- Free Course 1: CUET (SCIENCE) -->
+                    <div class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-md border border-gray-100 flex flex-col">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black cursor-pointer" onclick="handleStudyClick(event, 122)">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/346473_125_Science%20CUET%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" 
+                                 alt="CUET (SCIENCE)" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4 flex flex-col flex-1 justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 line-clamp-1 mb-2">CUET (SCIENCE)</h3>
+                                <span class="inline-block bg-[#20c997] text-white text-[10px] font-bold px-2.5 py-0.5 rounded tracking-wide">FREE</span>
+                            </div>
+                            <button onclick="handleStudyClick(event, 122)" class="w-full bg-[#20c997] hover:bg-[#1bb888] text-white font-bold text-xs py-2 rounded-lg transition btn-click-effect">
+                                Explore
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Free Course 2: CUET (HUMANITIES) -->
+                    <div class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-md border border-gray-100 flex flex-col">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black cursor-pointer" onclick="handleStudyClick(event, 123)">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6877813_125_Humanities%20CUET%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" 
+                                 alt="CUET (HUMANITIES)" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4 flex flex-col flex-1 justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 line-clamp-1 mb-2">CUET (HUMANITIES)</h3>
+                                <span class="inline-block bg-[#20c997] text-white text-[10px] font-bold px-2.5 py-0.5 rounded tracking-wide">FREE</span>
+                            </div>
+                            <button onclick="handleStudyClick(event, 123)" class="w-full bg-[#20c997] hover:bg-[#1bb888] text-white font-bold text-xs py-2 rounded-lg transition btn-click-effect">
+                                Explore
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Free Course 3: CUET (COMMERCE) -->
+                    <div class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-md border border-gray-100 flex flex-col">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black cursor-pointer" onclick="handleStudyClick(event, 124)">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/721208_125_Commerce%20CUET%20Batch%20Class%2012th%20PRO%20App%20Banners.jpg" 
+                                 alt="CUET (COMMERCE)" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4 flex flex-col flex-1 justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 line-clamp-1 mb-2">CUET (COMMERCE)</h3>
+                                <span class="inline-block bg-[#20c997] text-white text-[10px] font-bold px-2.5 py-0.5 rounded tracking-wide">FREE</span>
+                            </div>
+                            <button onclick="handleStudyClick(event, 124)" class="w-full bg-[#20c997] hover:bg-[#1bb888] text-white font-bold text-xs py-2 rounded-lg transition btn-click-effect">
+                                Explore
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Free Course 4: CLASS 12TH COMMERCE -->
+                    <div class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-md border border-gray-100 flex flex-col">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black cursor-pointer" onclick="handleStudyClick(event, 101)">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/379913_125_Commerce%20Prarambh%202.0%20Batch%20Class%2012th%20App%20Banners.jpg" 
+                                 alt="CLASS 12TH COMMERCE" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4 flex flex-col flex-1 justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 line-clamp-1 mb-2">CLASS 12TH COMMERCE</h3>
+                                <span class="inline-block bg-[#20c997] text-white text-[10px] font-bold px-2.5 py-0.5 rounded tracking-wide">FREE</span>
+                            </div>
+                            <button onclick="handleStudyClick(event, 101)" class="w-full bg-[#20c997] hover:bg-[#1bb888] text-white font-bold text-xs py-2 rounded-lg transition btn-click-effect">
+                                Explore
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Free Course 5: NIRMAAN Summer Camp 2026 -->
+                    <div class="course-card shrink-0 w-[240px] sm:w-[280px] rounded-xl overflow-hidden bg-white shadow-md border border-gray-100 flex flex-col">
+                        <div class="aspect-[16/9] w-full overflow-hidden bg-black cursor-pointer" onclick="handleStudyClick(event, 183)">
+                            <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1583344_125_Nirmaan%20Summer%20Camp%20App%20Banners09%20%281%29.jpg" 
+                                 alt="NIRMAAN Summer Camp" class="w-full h-full object-cover">
+                        </div>
+                        <div class="p-4 flex flex-col flex-1 justify-between gap-3">
+                            <div>
+                                <h3 class="text-sm font-bold text-gray-800 line-clamp-1 mb-2">NIRMAAN Summer Camp</h3>
+                                <span class="inline-block bg-[#20c997] text-white text-[10px] font-bold px-2.5 py-0.5 rounded tracking-wide">FREE</span>
+                            </div>
+                            <button onclick="handleStudyClick(event, 183)" class="w-full bg-[#20c997] hover:bg-[#1bb888] text-white font-bold text-xs py-2 rounded-lg transition btn-click-effect">
+                                Explore
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Circular Right Arrow Button (Matching Screenshot 2) -->
+                <button onclick="scrollFree(1)" 
+                        class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </section>
+
+
+        <!-- 5. ALL COURSES / FILTERABLE BATCHES SECTION -->
+        <section id="batches-section" class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-16 sm:pt-20">
+            
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-1" id="batchesHeading">Explore All Batches</h2>
+                    <p class="text-gray-500 text-xs sm:text-sm" id="batchesSubheading">Find the right course according to your target exam and grade.</p>
+                </div>
+
+                <!-- Filter Tabs -->
+                <div class="flex items-center gap-1.5 overflow-x-auto hide-scroll w-full md:w-auto p-1.5 bg-gray-100 rounded-xl">
+                    <button onclick="filterByTab('all')" id="tab-all" class="tab-btn active shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all bg-[#20c997] text-white shadow-sm">
+                        All Batches
+                    </button>
+                    <button onclick="filterByTab('class9')" id="tab-class9" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-600 hover:text-gray-900">
+                        Class 9th
+                    </button>
+                    <button onclick="filterByTab('class10')" id="tab-class10" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-600 hover:text-gray-900">
+                        Class 10th
+                    </button>
+                    <button onclick="filterByTab('class7_8')" id="tab-class7_8" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-600 hover:text-gray-900">
+                        Class 7th & 8th
+                    </button>
+                    <button onclick="filterByTab('class11_12')" id="tab-class11_12" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-600 hover:text-gray-900">
+                        Class 11th & 12th
+                    </button>
+                    <button onclick="filterByTab('cuet')" id="tab-cuet" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-600 hover:text-gray-900">
+                        CUET & Olympiad
+                    </button>
+                    <button onclick="filterByTab('wishlist')" id="tab-wishlist" class="tab-btn shrink-0 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all text-gray-600 hover:text-gray-900 flex items-center gap-1">
+                        <i data-lucide="bookmark" class="w-3.5 h-3.5"></i> My Enrolled
+                        <span id="tab-wishlist-count" class="bg-[#20c997] text-white text-[10px] font-extrabold px-1.5 py-0.2 rounded-full hidden">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loader Indicator -->
+            <div id="loadingIndicator" class="flex flex-col items-center justify-center py-20">
+                <i data-lucide="loader-2" class="w-8 h-8 animate-spin text-[#20c997] mb-3"></i>
+                <p class="text-gray-500 font-medium text-sm">Loading batches...</p>
+            </div>
+
+            <!-- Dynamic Batch Grid -->
+            <div id="batchGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 hidden">
+            </div>
+
+            <!-- Load More Container -->
+            <div id="loadMoreContainer" class="w-full flex justify-center mt-12 mb-6 hidden">
+                <button id="loadMoreBtn" onclick="loadMore()" class="px-8 py-2.5 bg-white border border-gray-300 hover:border-[#20c997] hover:text-[#20c997] rounded-xl text-gray-700 font-bold text-sm transition-all btn-click-effect flex items-center gap-2 shadow-sm">
+                    Load More Batches <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <!-- Empty State -->
+            <div id="emptyState" class="hidden flex-col items-center justify-center py-20 text-center">
+                <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4 text-gray-400">
+                    <i data-lucide="search-x" class="w-8 h-8"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-800 mb-1">No Batches Found</h3>
+                <p class="text-gray-500 text-sm max-w-sm mb-4">Try checking your spelling or selecting another category.</p>
+                <button onclick="clearSearch()" class="bg-[#20c997] text-white text-xs font-bold px-4 py-2 rounded-lg">View All Batches</button>
+            </div>
+        </section>
+
+
+        <!-- 6. OUR ACHIEVEMENTS SECTION (Matching Screenshot 3) -->
+        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-16 sm:pt-24">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-gray-50/70 rounded-3xl p-6 sm:p-12 border border-gray-100">
+                
+                <!-- Left: Educators Image (Matching Screenshot 3) -->
+                <div class="lg:col-span-6 flex justify-center items-center">
+                    <div class="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-xl border border-gray-200/60 bg-white">
+                        <img src="https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/1219057_125_9th%20aarambh%202.0%20plus%20banner%20app.jpg" 
+                             alt="Next Toppers Educators" 
+                             class="w-full h-auto object-cover transform hover:scale-102 transition duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
+                            <span class="text-white text-sm sm:text-base font-bold drop-shadow">India's Top Educators Under One Roof</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Content & 4 Stat Cards (Matching Screenshot 3) -->
+                <div class="lg:col-span-6 flex flex-col justify-center">
+                    <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-gray-900 mb-3">Our Achievements</h2>
+                    <p class="text-gray-600 text-xs sm:text-sm leading-relaxed mb-8">
+                        We are proud of the success we've achieved through innovative courses and student accomplishments. Each milestone reflects our dedication to providing top-quality education and fostering growth.
+                    </p>
+
+                    <!-- 4 Stats Grid (Matching 2x2 layout in Screenshot 3) -->
+                    <div class="grid grid-cols-2 gap-4 sm:gap-6">
+                        
+                        <!-- Stat 1: 20+ Instructors -->
+                        <div class="bg-blue-50/60 border border-blue-200/80 rounded-2xl p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-sm hover:shadow-md transition">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="presentation" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg sm:text-2xl font-black text-blue-700">20+</div>
+                                <div class="text-xs sm:text-sm font-semibold text-gray-700">Instructors</div>
+                            </div>
+                        </div>
+
+                        <!-- Stat 2: 20K+ Videos -->
+                        <div class="bg-emerald-50/60 border border-emerald-200/80 rounded-2xl p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-sm hover:shadow-md transition">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="video" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg sm:text-2xl font-black text-emerald-700">20K+</div>
+                                <div class="text-xs sm:text-sm font-semibold text-gray-700">Videos</div>
+                            </div>
+                        </div>
+
+                        <!-- Stat 3: 20L+ Students -->
+                        <div class="bg-rose-50/60 border border-rose-200/80 rounded-2xl p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-sm hover:shadow-md transition">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-rose-100 text-rose-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="users" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg sm:text-2xl font-black text-rose-600">20L+</div>
+                                <div class="text-xs sm:text-sm font-semibold text-gray-700">Students</div>
+                            </div>
+                        </div>
+
+                        <!-- Stat 4: 200+ Test Series -->
+                        <div class="bg-indigo-50/60 border border-indigo-200/80 rounded-2xl p-4 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-sm hover:shadow-md transition">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center shrink-0">
+                                <i data-lucide="graduation-cap" class="w-5 h-5 sm:w-6 sm:h-6"></i>
+                            </div>
+                            <div>
+                                <div class="text-lg sm:text-2xl font-black text-indigo-700">200+</div>
+                                <div class="text-xs sm:text-sm font-semibold text-gray-700">Test Series</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- 7. DOWNLOAD APP BANNER SECTION (Matching Screenshot 3) -->
+        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-12 sm:pt-16">
+            <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 border border-teal-100 rounded-3xl p-6 sm:p-12 relative overflow-hidden shadow-sm">
+                
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
+                    
+                    <!-- Left: Download App Information & Badges -->
+                    <div class="md:col-span-7 space-y-4">
+                        <h2 class="text-2xl sm:text-4xl font-extrabold text-teal-900 tracking-tight">Download App</h2>
+                        <p class="text-gray-600 text-xs sm:text-sm max-w-lg leading-relaxed">
+                            Get the NextToppers app to access Downloaded lectures anytime, anywhere and learn at your convenience.
+                        </p>
+
+                        <!-- App Download Badges -->
+                        <div class="flex flex-wrap items-center gap-3 pt-2">
+                            <a href="https://play.google.com" target="_blank" class="flex items-center gap-3 bg-black text-white px-4 py-2.5 rounded-xl hover:bg-gray-800 transition shadow-sm btn-click-effect">
+                                <i data-lucide="play" class="w-6 h-6 fill-white"></i>
+                                <div class="text-left">
+                                    <div class="text-[9px] uppercase tracking-wider text-gray-400 font-medium">ANDROID APP ON</div>
+                                    <div class="text-xs font-bold leading-none">Google Play</div>
+                                </div>
+                            </a>
+
+                            <a href="https://apple.com" target="_blank" class="flex items-center gap-3 bg-black text-white px-4 py-2.5 rounded-xl hover:bg-gray-800 transition shadow-sm btn-click-effect">
+                                <i data-lucide="apple" class="w-6 h-6 fill-white"></i>
+                                <div class="text-left">
+                                    <div class="text-[9px] uppercase tracking-wider text-gray-400 font-medium">Download on the</div>
+                                    <div class="text-xs font-bold leading-none">App Store</div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Mobile App Graphic Preview -->
+                    <div class="md:col-span-5 flex justify-center items-center">
+                        <div class="relative w-48 sm:w-56 bg-gray-900 rounded-[2.5rem] p-3 shadow-2xl border-4 border-gray-800 transform rotate-2 hover:rotate-0 transition duration-300">
+                            <div class="w-16 h-3 bg-black rounded-full mx-auto mb-2"></div>
+                            <div class="rounded-[2rem] overflow-hidden bg-white aspect-[9/18]">
+                                <img src="https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/1219057_125_9th%20aarambh%202.0%20plus%20banner%20app.jpg" 
+                                     alt="NextToppers Mobile App" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
     </main>
 
+    <!-- Professional Footer (Next Toppers Style) -->
+    <footer class="w-full bg-[#1f2327] text-gray-300 py-12 border-t border-gray-800">
+        <div class="max-w-[88rem] mx-auto px-4 sm:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-gray-800">
+                
+                <!-- Col 1: Brand & Logo -->
+                <div class="space-y-4">
+                    <div class="h-10 rounded-xl p-0.5 border border-white/10 bg-black/50 inline-flex items-center overflow-hidden">
+                        <img src="https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/2345517_1_nexttoppers_header_logo.jpg" 
+                             alt="Next Toppers" class="h-full w-auto object-contain rounded-lg">
+                    </div>
+                    <p class="text-xs text-gray-400 leading-relaxed">
+                        Best online learning platform for Class 7th to 12th, Boards, CUET, and Olympiad preparations with top faculties.
+                    </p>
+                </div>
+
+                <!-- Col 2: Quick Links -->
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-3 uppercase tracking-wider">Quick Links</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li><a href="#" class="hover:text-[#20c997] transition">Home</a></li>
+                        <li><a href="#batches-section" class="hover:text-[#20c997] transition">All Courses</a></li>
+                        <li><a href="#our-products-section" class="hover:text-[#20c997] transition">Our Products</a></li>
+                        <li><a href="contact.html" class="hover:text-[#20c997] transition">Blogs</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Policies -->
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-3 uppercase tracking-wider">Policies</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li><a href="contact.html" class="hover:text-[#20c997] transition">Privacy Policy</a></li>
+                        <li><a href="contact.html" class="hover:text-[#20c997] transition">Terms & Conditions</a></li>
+                        <li><a href="contact.html" class="hover:text-[#20c997] transition">Refund Policy</a></li>
+                        <li><a href="contact.html" class="hover:text-[#20c997] transition">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 4: Contact & Social -->
+                <div>
+                    <h4 class="text-sm font-bold text-white mb-3 uppercase tracking-wider">Support</h4>
+                    <ul class="space-y-2 text-xs text-gray-400">
+                        <li class="flex items-center gap-2"><i data-lucide="mail" class="w-4 h-4 text-[#20c997]"></i> support@nexttoppers.com</li>
+                        <li class="flex items-center gap-2"><i data-lucide="phone" class="w-4 h-4 text-[#20c997]"></i> +91 9179275087</li>
+                        <li class="flex items-center gap-2"><i data-lucide="map-pin" class="w-4 h-4 text-[#20c997]"></i> New Delhi, India</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-gray-500 gap-3">
+                <p>© 2026 Next Toppers. All Rights Reserved.</p>
+                <div class="flex items-center gap-4">
+                    <span class="text-gray-400">Made with ❤️ for Students</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Implementation -->
     <script>
         lucide.createIcons();
 
+        // Toast Helper
         window.showToast = function(msg, type = 'success') {
             const toast = document.getElementById('toast');
             const icon = document.getElementById('toast-icon');
-            toast.className = `fixed top-6 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-2.5 px-4 py-2.5 rounded-lg font-medium text-sm border toast-enter`;
+            toast.className = `fixed top-5 left-1/2 -translate-x-1/2 z-[999] flex items-center gap-2.5 px-5 py-3 rounded-xl font-semibold text-sm shadow-xl border toast-show`;
             
             if (type === 'success') {
-                toast.classList.add('bg-sky-950/90', 'border-sky-800', 'text-sky-400');
-                icon.setAttribute('data-lucide', 'check-circle-2');
+                toast.classList.add('bg-emerald-50', 'border-emerald-200', 'text-emerald-800');
+                icon.setAttribute('data-lucide', 'check-circle');
             } else {
-                toast.classList.add('bg-red-950/90', 'border-red-800', 'text-red-400');
+                toast.classList.add('bg-rose-50', 'border-rose-200', 'text-rose-800');
                 icon.setAttribute('data-lucide', 'alert-circle');
             }
             
@@ -208,25 +788,25 @@
             lucide.createIcons();
             
             setTimeout(() => {
-                toast.classList.remove('toast-enter');
+                toast.classList.remove('toast-show');
                 toast.classList.add('hidden');
             }, 3000);
         };
 
+        // Navigation to Content
         window.handleStudyClick = function(event, batchId) {
-            event.preventDefault();
+            if (event) event.preventDefault();
             window.location.href = `content.html?id=${batchId}`;
         };
 
-        let batchesData = { new: [] };
-        let currentTab = 'new';
-        
-        // Updated local storage key for new branding
-        let wishlist = JSON.parse(localStorage.getItem('studyace_wishlist') || localStorage.getItem('studybee_wishlist') || '[]').map(String);
+        // BATCH DATA & STATE
+        let allBatches = [];
+        let filteredBatches = [];
+        let currentTabFilter = 'all';
+        let wishlist = JSON.parse(localStorage.getItem('studybee_wishlist') || localStorage.getItem('studyace_wishlist') || '[]').map(String);
 
         const ITEMS_PER_PAGE = 12;
         let currentlyDisplayedCount = 0;
-        let currentFilteredData = [];
 
         const batchGrid = document.getElementById('batchGrid');
         const searchInput = document.getElementById('searchInput');
@@ -236,18 +816,92 @@
         const loadMoreContainer = document.getElementById('loadMoreContainer');
 
         document.addEventListener('DOMContentLoaded', () => {
-            updateWishlistCount();
+            updateWishlistBadges();
             fetchBatches();
+            initBannerSlider();
         });
 
+        // 1. BANNER SLIDER LOGIC ("sild hota huwa banner")
+        let currentBannerIdx = 0;
+        const totalBannerSlides = 5;
+        let bannerTimer = null;
+
+        function initBannerSlider() {
+            startBannerAutoPlay();
+            
+            const carouselEl = document.getElementById('heroBannerCarousel');
+            if (carouselEl) {
+                carouselEl.addEventListener('mouseenter', () => clearInterval(bannerTimer));
+                carouselEl.addEventListener('mouseleave', () => startBannerAutoPlay());
+            }
+        }
+
+        function startBannerAutoPlay() {
+            clearInterval(bannerTimer);
+            bannerTimer = setInterval(() => {
+                nextBannerSlide();
+            }, 4000);
+        }
+
+        function updateBannerUI() {
+            const track = document.getElementById('bannerTrack');
+            if (track) {
+                track.style.transform = `translateX(-${currentBannerIdx * 100}%)`;
+            }
+
+            const dots = document.querySelectorAll('.banner-dot');
+            dots.forEach((dot, idx) => {
+                if (idx === currentBannerIdx) {
+                    dot.className = 'banner-dot h-2 w-6 rounded-full bg-[#20c997] transition-all duration-300';
+                } else {
+                    dot.className = 'banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300';
+                }
+            });
+        }
+
+        window.nextBannerSlide = function() {
+            currentBannerIdx = (currentBannerIdx + 1) % totalBannerSlides;
+            updateBannerUI();
+        };
+
+        window.prevBannerSlide = function() {
+            currentBannerIdx = (currentBannerIdx - 1 + totalBannerSlides) % totalBannerSlides;
+            updateBannerUI();
+        };
+
+        window.goToBannerSlide = function(idx) {
+            currentBannerIdx = idx;
+            updateBannerUI();
+            startBannerAutoPlay();
+        };
+
+        // HORIZONTAL SCROLL HELPERS
+        window.scrollTrending = function(direction) {
+            const el = document.getElementById('trendingTrack');
+            if (el) el.scrollBy({ left: direction * 320, behavior: 'smooth' });
+        };
+
+        window.scrollProducts = function(direction) {
+            const el = document.getElementById('productsTrack');
+            if (el) el.scrollBy({ left: direction * 240, behavior: 'smooth' });
+        };
+
+        window.scrollFree = function(direction) {
+            const el = document.getElementById('freeTrack');
+            if (el) el.scrollBy({ left: direction * 300, behavior: 'smooth' });
+        };
+
+        // FETCH BATCHES FROM batches.json
         async function fetchBatches() {
             try {
                 const response = await fetch('batches.json');
                 if (!response.ok) throw new Error("Failed to load JSON");
                 const rawData = await response.json();
                 
-                batchesData.new = [...(rawData.new || []), ...(rawData.old || [])];
-                
+                const newItems = rawData.new || [];
+                const oldItems = rawData.old || [];
+                allBatches = [...newItems, ...oldItems];
+
                 loadingIndicator.classList.add('hidden');
                 batchGrid.classList.remove('hidden');
                 applyFiltersAndRender(true);
@@ -255,15 +909,17 @@
                 console.error("Error fetching batches:", error);
                 loadingIndicator.innerHTML = `
                     <div class="text-center py-10">
-                        <i data-lucide="alert-circle" class="w-8 h-8 text-slate-500 mx-auto mb-2"></i>
-                        <p class="text-slate-400 font-medium text-sm">Failed to load batches</p>
+                        <i data-lucide="alert-circle" class="w-8 h-8 text-rose-500 mx-auto mb-2"></i>
+                        <p class="text-gray-600 font-medium text-sm">Failed to load batches</p>
                     </div>`;
                 lucide.createIcons();
             }
         }
 
+        // REAL-TIME SEARCH OPTION
         searchInput.addEventListener('input', () => {
-            if (searchInput.value.length > 0) {
+            const val = searchInput.value.trim();
+            if (val.length > 0) {
                 clearSearchBtn.classList.remove('hidden');
             } else {
                 clearSearchBtn.classList.add('hidden');
@@ -271,45 +927,78 @@
             applyFiltersAndRender(true);
         });
 
-        function clearSearch() {
+        window.clearSearch = function() {
             searchInput.value = '';
             clearSearchBtn.classList.add('hidden');
             applyFiltersAndRender(true);
             searchInput.focus();
-        }
+        };
 
-        window.switchTab = function(tabName) {
-            currentTab = tabName;
-            searchInput.value = '';
-            clearSearchBtn.classList.add('hidden');
-            
+        // CATEGORY / CLASS FILTER HELPER
+        window.filterByClass = function(grade) {
+            const section = document.getElementById('batches-section');
+            if (section) section.scrollIntoView({ behavior: 'smooth' });
+
+            if (grade === '9th') filterByTab('class9');
+            else if (grade === '10th') filterByTab('class10');
+            else if (grade === '7th' || grade === '8th') filterByTab('class7_8');
+            else if (grade === '11th' || grade === '12th') filterByTab('class11_12');
+            else if (grade === 'cuet') filterByTab('cuet');
+            else filterByTab('all');
+        };
+
+        // TAB SWITCHING
+        window.filterByTab = function(tabName) {
+            currentTabFilter = tabName;
+
             document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-themeBlue/20', 'text-themeBlue', 'border-themeBlue/30');
-                btn.classList.add('bg-transparent', 'text-slate-400', 'border-transparent');
+                btn.classList.remove('bg-[#20c997]', 'text-white', 'shadow-sm');
+                btn.classList.add('text-gray-600');
             });
-            
-            const activeTab = document.getElementById(`tab-${tabName}`);
-            activeTab.classList.remove('bg-transparent', 'text-slate-400', 'border-transparent');
-            activeTab.classList.add('bg-themeBlue/20', 'text-themeBlue', 'border-themeBlue/30');
+
+            const activeBtn = document.getElementById(`tab-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.add('bg-[#20c997]', 'text-white', 'shadow-sm');
+                activeBtn.classList.remove('text-gray-600');
+            }
+
             applyFiltersAndRender(true);
         };
 
+        window.switchTab = function(tabName) {
+            const section = document.getElementById('batches-section');
+            if (section) section.scrollIntoView({ behavior: 'smooth' });
+            filterByTab(tabName);
+        };
+
+        // FILTER & RENDER ENGINE
         function applyFiltersAndRender(resetPagination = false) {
             const query = searchInput.value.toLowerCase().trim();
-            
-            if (currentTab === 'wishlist') {
-                const allBatches = batchesData.new;
-                const uniqueBatches = Array.from(new Map(allBatches.map(item => [String(item.id), item])).values());
-                currentFilteredData = uniqueBatches.filter(batch => wishlist.includes(String(batch.id)));
-            } else {
-                currentFilteredData = batchesData[currentTab] || [];
+            let result = [...allBatches];
+
+            // 1. Tab filter
+            if (currentTabFilter === 'wishlist') {
+                result = result.filter(batch => wishlist.includes(String(batch.id)));
+            } else if (currentTabFilter === 'class9') {
+                result = result.filter(b => b.title.toLowerCase().includes('9th'));
+            } else if (currentTabFilter === 'class10') {
+                result = result.filter(b => b.title.toLowerCase().includes('10th'));
+            } else if (currentTabFilter === 'class7_8') {
+                result = result.filter(b => b.title.toLowerCase().includes('7') || b.title.toLowerCase().includes('8') || b.title.toLowerCase().includes('nirmaan'));
+            } else if (currentTabFilter === 'class11_12') {
+                result = result.filter(b => b.title.toLowerCase().includes('11th') || b.title.toLowerCase().includes('12th'));
+            } else if (currentTabFilter === 'cuet') {
+                result = result.filter(b => b.title.toLowerCase().includes('cuet') || b.title.toLowerCase().includes('ioqm') || b.title.toLowerCase().includes('nsejs'));
             }
 
+            // 2. Search query filter
             if (query) {
-                currentFilteredData = currentFilteredData.filter(batch => {
+                result = result.filter(batch => {
                     return batch.title.toLowerCase().includes(query) || String(batch.id).includes(query);
                 });
             }
+
+            filteredBatches = result;
 
             if (resetPagination) {
                 currentlyDisplayedCount = 0;
@@ -320,7 +1009,7 @@
         }
 
         function renderBatchSlice() {
-            if (currentFilteredData.length === 0) {
+            if (filteredBatches.length === 0) {
                 batchGrid.classList.add('hidden');
                 emptyState.classList.remove('hidden');
                 emptyState.classList.add('flex');
@@ -332,10 +1021,10 @@
             emptyState.classList.remove('flex');
             batchGrid.classList.remove('hidden');
 
-            const nextCount = Math.min(currentlyDisplayedCount + ITEMS_PER_PAGE, currentFilteredData.length);
-            const itemsToRender = currentFilteredData.slice(currentlyDisplayedCount, nextCount);
+            const nextCount = Math.min(currentlyDisplayedCount + ITEMS_PER_PAGE, filteredBatches.length);
+            const itemsToRender = filteredBatches.slice(currentlyDisplayedCount, nextCount);
             
-            const html = itemsToRender.map((batch, index) => createCardHTML(batch, index)).join('');
+            const html = itemsToRender.map((batch) => createCardHTML(batch)).join('');
             
             if (currentlyDisplayedCount === 0) {
                 batchGrid.innerHTML = html;
@@ -346,7 +1035,7 @@
             currentlyDisplayedCount = nextCount;
             lucide.createIcons();
 
-            if (currentlyDisplayedCount < currentFilteredData.length) {
+            if (currentlyDisplayedCount < filteredBatches.length) {
                 loadMoreContainer.classList.remove('hidden');
             } else {
                 loadMoreContainer.classList.add('hidden');
@@ -359,8 +1048,7 @@
             
             const originalHtml = btn.innerHTML;
             btn.disabled = true;
-            
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-themeBlue"></i> Loading`;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin text-[#20c997]"></i> Loading...`;
             lucide.createIcons();
             
             setTimeout(() => {
@@ -368,90 +1056,106 @@
                 btn.innerHTML = originalHtml;
                 btn.disabled = false;
                 lucide.createIcons();
-            }, 300);
+            }, 250);
         };
 
-        function createCardHTML(batch, index) {
+        // CREATE BATCH CARD HTML (Matching Clean NextToppers Card Design)
+        function createCardHTML(batch) {
             const id = String(batch.id);
             const isEnrolled = wishlist.includes(id);
-            const delay = (index % ITEMS_PER_PAGE * 30) + 'ms';
-            
-            const enrollBtnState = isEnrolled 
-                ? `<button onclick="toggleEnroll(event, '${id}')" class="bg-themeBlue/10 text-themeBlue border border-themeBlue/20 px-3 py-1.5 rounded text-[11px] font-bold tracking-wider flex items-center gap-1.5 hover:bg-themeBlue/20 transition-colors"><i data-lucide="check" class="w-3.5 h-3.5"></i> ENROLLED</button>`
-                : `<button onclick="toggleEnroll(event, '${id}')" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded text-[11px] font-bold tracking-wider flex items-center gap-1.5 transition-colors btn-click-effect shadow-md border border-white/5"><i data-lucide="plus" class="w-3.5 h-3.5"></i> ENROLL</button>`;
+
+            const enrollBtn = isEnrolled 
+                ? `<button onclick="toggleEnroll(event, '${id}')" title="Remove from Enrolled" class="p-2 rounded-lg bg-emerald-50 text-[#20c997] border border-emerald-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors btn-click-effect"><i data-lucide="bookmark-check" class="w-4 h-4"></i></button>`
+                : `<button onclick="toggleEnroll(event, '${id}')" title="Enroll in Batch" class="p-2 rounded-lg bg-gray-100 text-gray-500 hover:text-[#20c997] hover:bg-emerald-50 transition-colors btn-click-effect"><i data-lucide="bookmark" class="w-4 h-4"></i></button>`;
 
             return `
-                <div class="premium-card rounded-xl overflow-hidden fade-in-pop group flex flex-col relative" style="animation-delay: ${delay}">
-                    <div class="relative w-full aspect-[16/9] overflow-hidden bg-slate-900 border-b border-white/5">
-                        <img src="${batch.thumbnail}" alt="${batch.title}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 opacity-90 group-hover:opacity-100">
+                <div class="course-card rounded-2xl overflow-hidden bg-white shadow-md border border-gray-100 flex flex-col group">
+                    
+                    <!-- Thumbnail Container with 16:9 Aspect Ratio -->
+                    <div class="relative w-full aspect-[16/9] overflow-hidden bg-gray-900 cursor-pointer" onclick="handleStudyClick(event, '${id}')">
+                        <img src="${batch.thumbnail}" alt="${batch.title}" loading="lazy" 
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         
-                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-90"></div>
-                        
-                        <div class="absolute top-3 right-3 bg-themeBlue/20 backdrop-blur-md border border-themeBlue/30 px-2 py-1 rounded flex items-center justify-center z-10 shadow-sm">
-                            <span class="text-themeBlue text-[10px] font-black tracking-widest uppercase">FREE</span>
+                        <!-- Top Free Badge -->
+                        <div class="absolute top-3 left-3 bg-[#20c997] text-white text-[10px] font-extrabold px-2.5 py-0.5 rounded shadow-sm tracking-wider uppercase">
+                            FREE
+                        </div>
+
+                        <!-- Enroll Bookmark Button on Top Right -->
+                        <div class="absolute top-2.5 right-2.5 z-10" id="enroll-icon-${id}">
+                            ${enrollBtn}
                         </div>
                     </div>
                     
-                    <div class="p-5 flex flex-col flex-1 relative z-20">
-                        <h3 class="text-slate-200 font-semibold text-sm leading-relaxed mb-4 line-clamp-2 group-hover:text-themeBlue transition-colors">${batch.title}</h3>
+                    <!-- Content Info -->
+                    <div class="p-4 sm:p-5 flex flex-col flex-1 justify-between bg-white">
+                        <h3 class="text-gray-900 font-bold text-sm leading-snug line-clamp-2 mb-4 group-hover:text-[#20c997] transition-colors" onclick="handleStudyClick(event, '${id}')">
+                            ${batch.title}
+                        </h3>
                         
-                        <div class="flex items-center justify-between mt-auto pt-4 border-t border-white/10">
-                            <div id="enroll-container-${id}">
-                                ${enrollBtnState}
-                            </div>
+                        <div class="pt-3 border-t border-gray-100 flex items-center justify-between gap-3">
+                            <span class="text-xs font-bold text-[#20c997]">100% Free Access</span>
                             
-                            <button onclick="handleStudyClick(event, '${id}')" class="bg-themeBlue hover:bg-themeBlueHover text-slate-900 px-4 py-2 rounded text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-colors btn-click-effect shadow-[0_0_15px_rgba(56,189,248,0.3)]">
-                                Let's Study <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+                            <button onclick="handleStudyClick(event, '${id}')" class="bg-[#20c997] hover:bg-[#1bb888] text-white px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-sm flex items-center gap-1.5 btn-click-effect">
+                                Explore <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
                             </button>
                         </div>
                     </div>
+
                 </div>
             `;
         }
 
+        // TOGGLE ENROLL / BOOKMARK
         window.toggleEnroll = function(event, batchId) {
-            event.stopPropagation();
+            if (event) event.stopPropagation();
             batchId = String(batchId);
             
             const index = wishlist.indexOf(batchId);
-            const container = document.getElementById(`enroll-container-${batchId}`);
+            const iconContainer = document.getElementById(`enroll-icon-${batchId}`);
             
             if (index === -1) {
                 wishlist.push(batchId);
-                showToast("Enrolled in batch!", "success");
-                if (container) {
-                    container.innerHTML = `<button onclick="toggleEnroll(event, '${batchId}')" class="bg-themeBlue/10 text-themeBlue border border-themeBlue/20 px-3 py-1.5 rounded text-[11px] font-bold tracking-wider flex items-center gap-1.5 hover:bg-themeBlue/20 transition-colors"><i data-lucide="check" class="w-3.5 h-3.5"></i> ENROLLED</button>`;
+                showToast("Enrolled in batch successfully!", "success");
+                if (iconContainer) {
+                    iconContainer.innerHTML = `<button onclick="toggleEnroll(event, '${batchId}')" title="Remove from Enrolled" class="p-2 rounded-lg bg-emerald-50 text-[#20c997] border border-emerald-200 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors btn-click-effect"><i data-lucide="bookmark-check" class="w-4 h-4"></i></button>`;
                 }
             } else {
                 wishlist.splice(index, 1);
-                if (container) {
-                    container.innerHTML = `<button onclick="toggleEnroll(event, '${batchId}')" class="bg-slate-700 hover:bg-slate-600 text-white px-3 py-1.5 rounded text-[11px] font-bold tracking-wider flex items-center gap-1.5 transition-colors btn-click-effect shadow-md border border-white/5"><i data-lucide="plus" class="w-3.5 h-3.5"></i> ENROLL</button>`;
+                showToast("Removed from enrolled batches", "error");
+                if (iconContainer) {
+                    iconContainer.innerHTML = `<button onclick="toggleEnroll(event, '${batchId}')" title="Enroll in Batch" class="p-2 rounded-lg bg-gray-100 text-gray-500 hover:text-[#20c997] hover:bg-emerald-50 transition-colors btn-click-effect"><i data-lucide="bookmark" class="w-4 h-4"></i></button>`;
                 }
                 
-                if (currentTab === 'wishlist') {
+                if (currentTabFilter === 'wishlist') {
                     applyFiltersAndRender(true);
                 }
             }
 
+            localStorage.setItem('studybee_wishlist', JSON.stringify(wishlist));
             localStorage.setItem('studyace_wishlist', JSON.stringify(wishlist));
-            updateWishlistCount();
+            updateWishlistBadges();
             lucide.createIcons();
         };
 
-        function updateWishlistCount() {
-            const countEl = document.getElementById('wishlist-count');
-            const mobileIndicator = document.getElementById('mobile-wishlist-indicator');
+        function updateWishlistBadges() {
+            const navBadge = document.getElementById('nav-wishlist-count');
+            const tabBadge = document.getElementById('tab-wishlist-count');
             
             if (wishlist.length > 0) {
-                countEl.innerText = wishlist.length;
-                countEl.classList.remove('hidden');
-                mobileIndicator.classList.remove('hidden');
+                if (navBadge) {
+                    navBadge.innerText = wishlist.length;
+                    navBadge.classList.remove('hidden');
+                }
+                if (tabBadge) {
+                    tabBadge.innerText = wishlist.length;
+                    tabBadge.classList.remove('hidden');
+                }
             } else {
-                countEl.classList.add('hidden');
-                mobileIndicator.classList.add('hidden');
+                if (navBadge) navBadge.classList.add('hidden');
+                if (tabBadge) tabBadge.classList.add('hidden');
             }
         }
     </script>
 </body>
 </html>
-
