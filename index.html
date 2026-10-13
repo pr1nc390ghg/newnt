@@ -77,7 +77,7 @@
         <span id="toast-msg">Notification</span>
     </div>
 
-    <!-- Top Header / Navbar (Matching Screenshot 1) -->
+    <!-- Top Header / Navbar (Matching Screenshot 1 & 2) -->
     <header class="w-full bg-[#2f3337] sticky top-0 z-50 shadow-md">
         <div class="max-w-[88rem] mx-auto px-4 sm:px-6 h-[68px] flex items-center justify-between gap-3 sm:gap-6">
             
@@ -90,7 +90,7 @@
                 </div>
             </div>
 
-            <!-- Search Option (Centered in Header as in Screenshot 1) -->
+            <!-- Search Option (Centered in Header as in Screenshot 1 & 2) -->
             <div class="flex-1 max-w-xl mx-2 sm:mx-6">
                 <div class="relative w-full">
                     <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
@@ -145,74 +145,50 @@
     <!-- Main Content Area -->
     <main class="flex-1 w-full bg-white pb-20">
         
-        <!-- 1. SLIDING BANNER SECTION ("sild hota huwa banner") -->
-        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-5 sm:pt-7">
+        <!-- 1. SLIDING BANNER SECTION (Exact Sleek Proportions as in Screenshot 2) -->
+        <section class="max-w-6xl mx-auto px-4 sm:px-6 pt-5 sm:pt-6">
             <div class="relative overflow-hidden rounded-2xl shadow-md border border-gray-100 group bg-gray-900" id="heroBannerCarousel">
                 
                 <!-- Slides Track -->
                 <div id="bannerTrack" class="slider-track w-full">
                     
-                    <!-- Slide 1: Aarambh 2.0 PLUS 9th -->
-                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-amber-700 via-orange-600 to-amber-900 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 179)">
-                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1219057_125_9th%20aarambh%202.0%20plus%20banner%20app.jpg" 
-                             alt="Class 9th Aarambh 2.0 Plus Banner" 
-                             class="w-full h-full object-cover">
-                    </div>
-
-                    <!-- Slide 2: Aarambh 2.0 10th -->
-                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-blue-900 via-indigo-800 to-purple-900 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 176)">
-                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/356423_125_10th%20aarambh%202.0%20banner%20app%202.jpg" 
+                    <!-- Slide 1: Exact Class 10th Aarambh 2.0 Banner from Screenshot 2 -->
+                    <div class="min-w-full relative aspect-[5.5/1] bg-[#0c1a26] cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 176)">
+                        <img src="banner_class10.png" 
                              alt="Class 10th Aarambh 2.0 Banner" 
-                             class="w-full h-full object-cover">
+                             class="w-full h-full object-cover object-center">
                     </div>
 
-                    <!-- Slide 3: Nirmaan 2.0 Class 8th -->
-                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-emerald-900 via-teal-800 to-cyan-900 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 193)">
-                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/6292174_125_Nirmaan%202.0%20Batch%20Class%208th%20App%20Banners09.png" 
-                             alt="Nirmaan 2.0 Class 8th Banner" 
-                             class="w-full h-full object-cover">
-                    </div>
-
-                    <!-- Slide 4: Science Class 11th Prarambh -->
-                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-blue-950 via-cyan-900 to-teal-950 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 107)">
-                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/7450443_125_Science%20Prarambh%202.0%20Batch%20Class%2011th%20App%20Banners.jpg" 
-                             alt="Class 11th Prarambh 2.0 Banner" 
-                             class="w-full h-full object-cover">
-                    </div>
-
-                    <!-- Slide 5: Science Class 12th Prarambh -->
-                    <div class="min-w-full relative aspect-[21/9] sm:aspect-[24/9] md:aspect-[3/1] bg-gradient-to-r from-indigo-950 via-slate-900 to-blue-950 cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 103)">
-                        <img src="https://dylnd2lqy6eys.cloudfront.net/1770981347/admin_v2/uploads/courses/thumbnail/1153510_125_Science%20Prarambh%202.0%20Batch%20Class%2012th%20App%20Banners.jpg" 
-                             alt="Class 12th Prarambh 2.0 Banner" 
-                             class="w-full h-full object-cover">
+                    <!-- Slide 2: Exact Class 9th Aarambh 2.0 PLUS Banner from Screenshot 1 -->
+                    <div class="min-w-full relative aspect-[5.5/1] bg-[#221004] cursor-pointer overflow-hidden" onclick="handleStudyClick(event, 179)">
+                        <img src="banner_class9.png" 
+                             alt="Class 9th Aarambh 2.0 Plus Banner" 
+                             class="w-full h-full object-cover object-center">
                     </div>
 
                 </div>
 
                 <!-- Left & Right Arrow Controls on Carousel -->
                 <button onclick="prevBannerSlide()" aria-label="Previous Slide" 
-                        class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10 btn-click-effect">
-                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                        class="absolute left-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10 btn-click-effect">
+                    <i data-lucide="chevron-left" class="w-4 h-4"></i>
                 </button>
                 <button onclick="nextBannerSlide()" aria-label="Next Slide" 
-                        class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10 btn-click-effect">
-                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                        class="absolute right-3 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-black/40 hover:bg-black/70 text-white backdrop-blur-sm flex items-center justify-center transition opacity-0 group-hover:opacity-100 z-10 btn-click-effect">
+                    <i data-lucide="chevron-right" class="w-4 h-4"></i>
                 </button>
             </div>
 
-            <!-- Dots Indicators Below Banner (Exact style as in Screenshot 1) -->
-            <div class="flex items-center justify-center gap-2 mt-3.5" id="bannerDots">
+            <!-- Dots Indicators Below Banner (Exact style as in Screenshot 2) -->
+            <div class="flex items-center justify-center gap-2 mt-3" id="bannerDots">
                 <button onclick="goToBannerSlide(0)" class="banner-dot h-2 w-6 rounded-full bg-[#20c997] transition-all duration-300"></button>
                 <button onclick="goToBannerSlide(1)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
-                <button onclick="goToBannerSlide(2)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
-                <button onclick="goToBannerSlide(3)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
-                <button onclick="goToBannerSlide(4)" class="banner-dot h-2 w-2 rounded-full bg-gray-300 hover:bg-gray-400 transition-all duration-300"></button>
             </div>
         </section>
 
 
-        <!-- 2. TRENDING COURSES SECTION (Matching Screenshot 1) -->
-        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-10 sm:pt-14">
+        <!-- 2. TRENDING COURSES SECTION (Matching Screenshot 1 & 2) -->
+        <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-9 sm:pt-12">
             <div class="text-center mb-6">
                 <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 flex items-center justify-center gap-2">
                     <span>🔥</span> Trending Courses
@@ -220,7 +196,7 @@
             </div>
 
             <div class="relative px-2 sm:px-8">
-                <!-- Circular Left Arrow Button (Matching Teal Round Arrow in Screenshot 1) -->
+                <!-- Circular Left Arrow Button (Matching Teal Round Arrow) -->
                 <button onclick="scrollTrending(-1)" 
                         class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
                     <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -279,7 +255,7 @@
 
                 </div>
 
-                <!-- Circular Right Arrow Button (Matching Screenshot 1) -->
+                <!-- Circular Right Arrow Button -->
                 <button onclick="scrollTrending(1)" 
                         class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
                     <i data-lucide="chevron-right" class="w-5 h-5"></i>
@@ -295,7 +271,7 @@
             </div>
 
             <div class="relative px-2 sm:px-8">
-                <!-- Circular Left Arrow Button (Matching Teal Round Arrow) -->
+                <!-- Circular Left Arrow Button -->
                 <button onclick="scrollProducts(-1)" 
                         class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
                     <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -390,7 +366,7 @@
 
                 </div>
 
-                <!-- Circular Right Arrow Button (Matching Screenshot 2) -->
+                <!-- Circular Right Arrow Button -->
                 <button onclick="scrollProducts(1)" 
                         class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
                     <i data-lucide="chevron-right" class="w-5 h-5"></i>
@@ -409,7 +385,7 @@
             </div>
 
             <div class="relative px-2 sm:px-8">
-                <!-- Circular Left Arrow Button (Matching Screenshot 2) -->
+                <!-- Circular Left Arrow Button -->
                 <button onclick="scrollFree(-1)" 
                         class="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
                     <i data-lucide="chevron-left" class="w-5 h-5"></i>
@@ -505,7 +481,7 @@
 
                 </div>
 
-                <!-- Circular Right Arrow Button (Matching Screenshot 2) -->
+                <!-- Circular Right Arrow Button -->
                 <button onclick="scrollFree(1)" 
                         class="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#20c997] hover:bg-[#1bb888] text-white flex items-center justify-center shadow-md z-20 transition hover:scale-105 active:scale-95 btn-click-effect">
                     <i data-lucide="chevron-right" class="w-5 h-5"></i>
@@ -579,19 +555,16 @@
         </section>
 
 
-        <!-- 6. OUR ACHIEVEMENTS SECTION (Matching Screenshot 3) -->
+        <!-- 6. OUR ACHIEVEMENTS SECTION (Exact NextToppers Image & Layout) -->
         <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-16 sm:pt-24">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-gray-50/70 rounded-3xl p-6 sm:p-12 border border-gray-100">
                 
-                <!-- Left: Educators Image (Matching Screenshot 3) -->
+                <!-- Left: Exact Educators Image from NextToppers -->
                 <div class="lg:col-span-6 flex justify-center items-center">
-                    <div class="relative w-full max-w-lg rounded-2xl overflow-hidden shadow-xl border border-gray-200/60 bg-white">
-                        <img src="https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/1219057_125_9th%20aarambh%202.0%20plus%20banner%20app.jpg" 
+                    <div class="relative w-full max-w-lg">
+                        <img src="https://nexttoppers.com/images/Nexttopper_achivement.png" 
                              alt="Next Toppers Educators" 
-                             class="w-full h-auto object-cover transform hover:scale-102 transition duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex items-end p-6">
-                            <span class="text-white text-sm sm:text-base font-bold drop-shadow">India's Top Educators Under One Roof</span>
-                        </div>
+                             class="w-full h-auto object-contain mx-auto drop-shadow-md">
                     </div>
                 </div>
 
@@ -656,7 +629,7 @@
         </section>
 
 
-        <!-- 7. DOWNLOAD APP BANNER SECTION (Matching Screenshot 3) -->
+        <!-- 7. DOWNLOAD APP BANNER SECTION (Exact Side Image from NextToppers) -->
         <section class="max-w-[88rem] mx-auto px-4 sm:px-6 pt-12 sm:pt-16">
             <div class="bg-gradient-to-r from-emerald-50 via-teal-50 to-cyan-50 border border-teal-100 rounded-3xl p-6 sm:p-12 relative overflow-hidden shadow-sm">
                 
@@ -689,15 +662,11 @@
                         </div>
                     </div>
 
-                    <!-- Right: Mobile App Graphic Preview -->
+                    <!-- Right: Exact Download App Side Image from NextToppers -->
                     <div class="md:col-span-5 flex justify-center items-center">
-                        <div class="relative w-48 sm:w-56 bg-gray-900 rounded-[2.5rem] p-3 shadow-2xl border-4 border-gray-800 transform rotate-2 hover:rotate-0 transition duration-300">
-                            <div class="w-16 h-3 bg-black rounded-full mx-auto mb-2"></div>
-                            <div class="rounded-[2rem] overflow-hidden bg-white aspect-[9/18]">
-                                <img src="https://decicqog4ulhy.cloudfront.net/0/admin_v2/uploads/courses/thumbnail/1219057_125_9th%20aarambh%202.0%20plus%20banner%20app.jpg" 
-                                     alt="NextToppers Mobile App" class="w-full h-full object-cover">
-                            </div>
-                        </div>
+                        <img src="https://nexttoppers.com/images/nextDownloadAppSideImage.png" 
+                             alt="NextToppers Mobile App" 
+                             class="w-full max-w-lg h-auto object-contain mx-auto drop-shadow-md">
                     </div>
 
                 </div>
@@ -745,7 +714,7 @@
                     </ul>
                 </div>
 
-                <!-- Col 4: Contact & Social -->
+                <!-- Col 4: Contact & Support -->
                 <div>
                     <h4 class="text-sm font-bold text-white mb-3 uppercase tracking-wider">Support</h4>
                     <ul class="space-y-2 text-xs text-gray-400">
@@ -821,26 +790,20 @@
             initBannerSlider();
         });
 
-        // 1. BANNER SLIDER LOGIC ("sild hota huwa banner")
+        // 1. BANNER SLIDER LOGIC ("slide automatic hi ho")
         let currentBannerIdx = 0;
-        const totalBannerSlides = 5;
+        const totalBannerSlides = 2;
         let bannerTimer = null;
 
         function initBannerSlider() {
             startBannerAutoPlay();
-            
-            const carouselEl = document.getElementById('heroBannerCarousel');
-            if (carouselEl) {
-                carouselEl.addEventListener('mouseenter', () => clearInterval(bannerTimer));
-                carouselEl.addEventListener('mouseleave', () => startBannerAutoPlay());
-            }
         }
 
         function startBannerAutoPlay() {
-            clearInterval(bannerTimer);
+            if (bannerTimer) clearInterval(bannerTimer);
             bannerTimer = setInterval(() => {
                 nextBannerSlide();
-            }, 4000);
+            }, 3500);
         }
 
         function updateBannerUI() {
@@ -867,6 +830,7 @@
         window.prevBannerSlide = function() {
             currentBannerIdx = (currentBannerIdx - 1 + totalBannerSlides) % totalBannerSlides;
             updateBannerUI();
+            startBannerAutoPlay();
         };
 
         window.goToBannerSlide = function(idx) {
@@ -1059,7 +1023,7 @@
             }, 250);
         };
 
-        // CREATE BATCH CARD HTML (Matching Clean NextToppers Card Design)
+        // CREATE BATCH CARD HTML
         function createCardHTML(batch) {
             const id = String(batch.id);
             const isEnrolled = wishlist.includes(id);
